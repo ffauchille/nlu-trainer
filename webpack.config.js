@@ -15,7 +15,7 @@ const devPlugins = [
      * @param systemvars (false) - Set to true if you would rather load all system variables as well (useful for CI purposes).
      * @param silent (false) - If true, all warnings will be surpressed.
      */
-    new DotEnv()
+    new DotEnv({ systemvars: true })
 ]
 
 const buildDir = "built"
