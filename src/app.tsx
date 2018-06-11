@@ -4,7 +4,7 @@ export class App extends React.Component<any, {}> {
     render() {
         return (
         <div>
-            
+            Hi there :)
         </div>)
     }
 }
