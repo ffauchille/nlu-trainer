@@ -1,5 +1,5 @@
 import { Reducer } from 'redux'
-import * as actions from './actions'
+import * as actions from '../actions'
 import { Intent } from '../../models/Intent';
 
 export type State = {
@@ -10,19 +10,15 @@ export const defaultState = (): State => ({
     intents: []
 });
 
-function onSomething(state: State, i: actions.Something): State {
-return { ...state, }
-}
-
-function onSomethingElse(state: State, i: actions.SomethingElse): State {
-return { ...state, }
-}
-
 export const reducer: Reducer<State> = (
 state: State = defaultState(),
-  action: actions.AllActionTypes
+  action: actions.Actions
 ): State => {
-    switch (action){
-        case 
+    switch (action.type){
+        case actions.LoadUtterances:{
+            return state
+        }
+        default:
+            return state
     }
 }

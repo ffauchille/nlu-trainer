@@ -15,7 +15,7 @@ const devPlugins = [
      * @param systemvars (false) - Set to true if you would rather load all system variables as well (useful for CI purposes).
      * @param silent (false) - If true, all warnings will be surpressed.
      */
-    new DotEnv({ systemvars: true })
+    new DotEnv({})
 ]
 
 const buildDir = "built"
@@ -32,7 +32,7 @@ const devConfig = {
     stats: "errors-only",
     proxy: {
       "/api": {
-        target: process.env.RASA_ENDPOINT || "http://localhost:5000",
+        target: process.env.NLU_TRAINER_API || "http://localhost:8000",
         pathRewrite: { "^/api": "" }
       }
     }
@@ -61,7 +61,7 @@ module.exports = function(env) {
             rules: [
                 { 
                     test: /\.tsx?$/,
-                    use: "ts-loader"
+                    use: "awesome-typescript-loader"
                 },
                 {
                     test: /\.(png|jpg|jpeg|gif|bmp|svg)$/,
@@ -73,8 +73,15 @@ module.exports = function(env) {
                         }
                       }
                     ]
+                },
+                {
+                    test: /\.js$/,
+                    exclude: /node_modules/,
+                    enforce: "pre",
+                    loader: "source-map-loader"
                 }
-            ]
+            ],
+      
         },
         resolve: {
             extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],

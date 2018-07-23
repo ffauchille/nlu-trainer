@@ -1,15 +1,18 @@
 import * as React from 'react'
 import { Provider } from 'react-redux';
-import { createStore, combineReducers } from 'redux';
-import * as reducers from './reducers'
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import reducers, { StoreState } from './reducers'
 import { Router } from 'react-router';
-import { createBrowserHistory } from 'history';
+import { createBrowserHistory, History } from 'history';
+import { createEpicMiddleware } from 'redux-observable';
+import epics from "./epics"
 
 const store = createStore(
-    combineReducers(reducers)
+    combineReducers<StoreState>(reducers),
+    applyMiddleware(createEpicMiddleware(epics))
 )
 
-const history = createBrowserHistory()
+const history: History = createBrowserHistory()
 
 export class App extends React.Component<any, {}> {
     render() {
@@ -17,7 +20,7 @@ export class App extends React.Component<any, {}> {
         <Provider store={store}>
             <Router history={history}>
             </Router>
-            
-        </Provider>)
+        </Provider>
+        )
     }
 }

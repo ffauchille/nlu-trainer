@@ -3,6 +3,7 @@ import { Container, SegmentGroup, Segment, Grid, Header, Statistic } from "seman
 import { Intent } from "../models/Intent";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
+import { addUtterance } from "./actions";
 
 
 type TrainerOwnProps = {
@@ -54,7 +55,7 @@ const mapStateToProps = (state: any, ownProps: TrainerOwnProps) => ({
 })
 
 const mapDispatcherToProps = (dispatch: Dispatch) => ({
-    addUtterrance: bindActionCreators(null, dispatch)
+    addUtterrance: bindActionCreators(addUtterance, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatcherToProps)(Trainer)
