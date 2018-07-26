@@ -6,95 +6,114 @@ var webpack = require("webpack");
 var DotEnv = require("dotenv-webpack");
 
 const devPlugins = [
-    new webpackNotifier({ title: pkg.name }),
-    new webpack.HotModuleReplacementPlugin(),
-    /**
-     * @see https://github.com/mrsteele/dotenv-webpack
-     * @param path ('./.env') - The path to your environment variables.
-     * @param safe (false) - If false ignore safe-mode, if true load './.env.example', if a string load that file as the sample.
-     * @param systemvars (false) - Set to true if you would rather load all system variables as well (useful for CI purposes).
-     * @param silent (false) - If true, all warnings will be surpressed.
-     */
-    new DotEnv({})
-]
+  new webpackNotifier({ title: pkg.name }),
+  new webpack.HotModuleReplacementPlugin(),
+  /**
+   * @see https://github.com/mrsteele/dotenv-webpack
+   * @param path ('./.env') - The path to your environment variables.
+   * @param safe (false) - If false ignore safe-mode, if true load './.env.example', if a string load that file as the sample.
+   * @param systemvars (false) - Set to true if you would rather load all system variables as well (useful for CI purposes).
+   * @param silent (false) - If true, all warnings will be surpressed.
+   */
+  new DotEnv({})
+];
 
-const buildDir = "built"
+const buildDir = "built";
 
 const devConfig = {
-    devServer: {
+  devServer: {
     host: "localhost",
     port: 8090,
     historyApiFallback: true,
-    contentBase: path.resolve(__dirname, buildDir),
-    hotOnly: true,
+    hot: true,
     inline: true,
     // Display only errors to reduce the amount of output.
     stats: "errors-only",
     proxy: {
       "/api": {
-        target: process.env.NLU_TRAINER_API || "http://localhost:8000",
+        target: process.env.NLU_TRAINER_API,
         pathRewrite: { "^/api": "" }
       }
     }
   }
-}
+};
 
-const prodConfig = {}
+const prodConfig = {};
 
-
-const prodPlugins = []
+const prodPlugins = [];
 
 module.exports = function(env) {
-    let otherPlugins = env === "dev" ? devPlugins : prodPlugins
-    let otherConf = env === "dev" ? devConfig : prodConfig
-    return {
-        entry: {
-            app: path.resolve(__dirname)
+  let otherPlugins = env === "dev" ? devPlugins : prodPlugins;
+  let otherConf = env === "dev" ? devConfig : prodConfig;
+  return {
+    entry: {
+      app: path.resolve(__dirname)
+    },
+    output: {
+      path: path.resolve(__dirname, buildDir),
+      filename: "app.js"
+    },
+    performance: {
+      hints: false
+    },
+    devtool: "source-map",
+    mode: process.env.dev ? "devlopment" : "production",
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          use: "awesome-typescript-loader"
         },
-        output: {
-            path: path.resolve(__dirname, buildDir),
-            filename: "app.js"
+        {
+          test: /\.(png|jpg|jpeg|gif|bmp|svg)$/,
+          use: [
+            {
+              loader: "file-loader",
+              options: {
+                name: "images/[hash].[ext]"
+              }
+            }
+          ]
         },
-        devtool: "source-map",
-        mode: process.env.dev ? "devlopment" : "production",
-        module: {
-            rules: [
-                { 
-                    test: /\.tsx?$/,
-                    use: "awesome-typescript-loader"
-                },
-                {
-                    test: /\.(png|jpg|jpeg|gif|bmp|svg)$/,
-                    use: [
-                      {
-                        loader: "file-loader",
-                        options: {
-                          name: "images/[hash].[ext]"
-                        }
-                      }
-                    ]
-                },
-                {
-                    test: /\.js$/,
-                    exclude: /node_modules/,
-                    enforce: "pre",
-                    loader: "source-map-loader"
-                }
-            ],
-      
+        {
+          test: /\.(eot|woff2|woff|ttf)$/,
+          use: [
+            {
+              loader: "file-loader",
+              options: {
+                name: "fonts/[hash].[ext]"
+              }
+            }
+          ]
         },
-        resolve: {
-            extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
-            modules: [ path.resolve(__dirname), "node_modules"]
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          enforce: "pre",
+          loader: "source-map-loader"
         },
-        plugins: [
-            new htmlWebpack({
-                title: pkg.description,
-                appMountId: "app",
-                template: "./index.html"
-            }),
-            ...otherPlugins
-        ],
-        ...otherConf
-    }
-}
+        {
+          test: /\.css$/,
+          exclude: /node_modules/,
+          use: [ 
+            { loader: "style-loader"},
+            { loader: "css-loader"} 
+          ]
+        }
+      ]
+    },
+    resolve: {
+      extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
+      modules: [path.resolve(__dirname), "node_modules"]
+    },
+    plugins: [
+      new htmlWebpack({
+        title: pkg.description,
+        appMountId: "app",
+        template: "./index.html"
+      }),
+      ...otherPlugins
+    ],
+    ...otherConf
+  };
+};
