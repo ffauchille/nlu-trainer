@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Header, Icon, Grid, Item, Button } from "semantic-ui-react";
+import { Item } from "semantic-ui-react";
 
 type ItemsViewProps<T> = React.Props<any> & {
   renderItem: (d: T) => any /** Item */;
@@ -17,7 +17,7 @@ class ItemsView<T> extends React.Component<ItemsViewProps<T>, ItemsViewState> {
       elem = (
         <Item.Group divided>
           {this.props.data.map((d, idx) => (
-            <Item ref={`item-${idx}`}>
+            <Item key={`item-${idx}`}>
               <Item.Content>{this.props.renderItem(d)}</Item.Content>
             </Item>
           ))}

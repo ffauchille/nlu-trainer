@@ -3,12 +3,12 @@ import { AppIntentsLoadedAction, AppIntentsLoaded, Actions, UnselectIntentAction
 import { Intent } from "../../models/Intent";
 
 type State = {
-  appIntents: Intent[],
+  all: Intent[],
   selected?: Intent
 };
 
 export const defaultState = (): State => ({
-  appIntents: []
+  all: []
 });
 
 export const reducer: Reducer<State> = (
@@ -19,7 +19,7 @@ export const reducer: Reducer<State> = (
     case AppIntentsLoadedAction: {
       return {
         ...state,
-        appIntents: (action as AppIntentsLoaded).intents
+        all: (action as AppIntentsLoaded).intents
       };
     }
     case UnselectIntentAction: {

@@ -3,7 +3,7 @@ import { Actions, LoadAppIntentsAction, LoadAppIntents, appIntentsLoaded, Unsele
 import { flatMap, map } from "rxjs/operators";
 import * as api from "../../apis"
 import { StoreState } from "../../reducers";
-import { push } from "react-router-redux";
+import { push } from "connected-react-router";
 
 const loadAppIntentsEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
     action$

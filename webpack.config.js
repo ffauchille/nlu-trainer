@@ -28,7 +28,9 @@ const devConfig = {
     hot: true,
     inline: true,
     // Display only errors to reduce the amount of output.
-    stats: "errors-only"
+    stats: "errors-only",
+    contentBase: path.resolve(__dirname)
+
   }
 };
 
@@ -51,8 +53,8 @@ module.exports = function(env) {
     performance: {
       hints: false
     },
+    mode: env === 'dev' ? "development" : "production",
     devtool: "source-map",
-    mode: env === "dev" ? "devlopment" : "production",
     module: {
       rules: [
         {
@@ -106,6 +108,7 @@ module.exports = function(env) {
         title: pkg.description,
         appMountId: "app",
         template: "./index.html"
+        
       }),
       ...otherPlugins
     ],

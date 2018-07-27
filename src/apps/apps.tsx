@@ -1,12 +1,11 @@
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
-import { push, RouterAction } from "react-router-redux";
+import { push } from "connected-react-router";
 import { bindActionCreators } from "../../node_modules/redux";
 import { loadApps, LoadApps, appSelected, AppSelected } from "./actions";
 import { AppModel } from "../models/app";
 import { Grid, Container, Header, Button, Item, Icon } from "semantic-ui-react";
 import { StoreState } from "../reducers";
-import { LocationState, LocationDescriptor } from "history";
 import ItemsView from "../items";
 
 type AppsOwnProps = React.Props<any> & {};
@@ -14,10 +13,7 @@ type AppsProps = AppsOwnProps & {
   apps: AppModel[];
   loadApps: () => LoadApps;
   appSelected: (app: AppModel) => AppSelected;
-  pushRoute: (
-    location: LocationDescriptor,
-    state?: LocationState
-  ) => RouterAction;
+  pushRoute: any;
 };
 type AppsState = {};
 
@@ -47,7 +43,8 @@ class Apps extends React.Component<AppsProps, AppsState> {
                   <Icon name="check" color="green" /> Ready
                 </Grid.Column>
                 <Grid.Column width="4">
-                  <Button basic icon="setting" color="black">
+                  <Button basic color="black">
+                    <Icon name="settings" color="black"/>
                     Train
                   </Button>
                 </Grid.Column>

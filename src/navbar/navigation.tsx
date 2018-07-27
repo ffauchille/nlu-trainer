@@ -1,10 +1,11 @@
+
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 import { Breadcrumb } from "semantic-ui-react";
 import { AppModel } from "../models/app";
 import { Intent } from "../models/Intent";
-import { bindActionCreators } from "redux";
-import { push, RouterAction } from "react-router-redux";
+import { bindActionCreators, Action } from "redux";
+import { push } from "connected-react-router";
 import { LocationState, LocationDescriptor } from "history";
 import { StoreState } from "../reducers";
 import { UnselectApp, unselectApp } from "../apps/actions";
@@ -20,19 +21,20 @@ type NavigationProps = NavigationOwnProps & {
   pushRoute: (
     location: LocationDescriptor,
     state?: LocationState
-  ) => RouterAction;
+  ) => Action;
 
   unselectApp: () => UnselectApp;
   unselectIntent: () => UnselectIntent;
 };
 type NavigationState = {};
 
-const divider = <Breadcrumb.Divider>/</Breadcrumb.Divider>;
+const divider = (cpt: number) => <Breadcrumb.Divider key={`divider ${cpt}`}>/</Breadcrumb.Divider>;
 
 class Navigation extends React.Component<NavigationProps, NavigationState> {
   render() {
     var sections = [
       <Breadcrumb.Section
+        key="root-section"
         link={this.props.appSelected !== undefined}
         active={this.props.appSelected === undefined}
         onClick={(e, d) => { 
@@ -47,8 +49,9 @@ class Navigation extends React.Component<NavigationProps, NavigationState> {
     if (this.props.appSelected) {
       let appName = this.props.appSelected.name;
       sections.push(
-        divider,
+        divider(1),
         <Breadcrumb.Section
+          key="app-section"
           link
           onClick={(e, d) => { 
             this.props.pushRoute("/apps/" + urlify(appName))
@@ -61,20 +64,21 @@ class Navigation extends React.Component<NavigationProps, NavigationState> {
       if (this.props.intentSelected) {
         let intentName = this.props.intentSelected.name;
         sections.push(
-          divider,
+          divider(2),
           <Breadcrumb.Section
+            key="intent-link-section"
             link
             onClick={(e, d) => this.props.pushRoute("/apps/" + urlify(appName) + "/" + urlify(intentName))}
           >
             {intentName}
           </Breadcrumb.Section>,
-          divider,
-          <Breadcrumb.Section active>Examples</Breadcrumb.Section>
+          divider(3),
+          <Breadcrumb.Section key="examples-section" active>Examples</Breadcrumb.Section>
         );
       } else {
         sections.push(
-          divider,
-          <Breadcrumb.Section active>Intents</Breadcrumb.Section>
+          divider(4),
+          <Breadcrumb.Section key="intent-section" active>Intents</Breadcrumb.Section>
         );
       }
     }
