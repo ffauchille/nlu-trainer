@@ -1,9 +1,10 @@
 import { Reducer } from 'redux'
-import { Actions, LoadAppsAction, AppsLoadedAction, AppsLoaded } from '../actions'
+import { Actions, AppsLoadedAction, AppsLoaded, AppSelectedAction, AppSelected, LoadAppsAction, UnselectAppAction } from '../actions'
 import { AppModel } from '../../models/app';
 
-export type State = {
+type State = {
     all: AppModel[]
+    selected?: AppModel
 };
 
 export const defaultState = (): State => ({
@@ -12,7 +13,7 @@ export const defaultState = (): State => ({
 
 export const reducer: Reducer<State> = (
 state: State = defaultState(),
-  action: Actions
+  action
 ): State => {
     switch(action.type) {
         case AppsLoadedAction: {
@@ -21,7 +22,22 @@ state: State = defaultState(),
                 all: (action as AppsLoaded).apps
             }
         }
+        case AppSelectedAction: {
+            return {
+                ...state,
+                selected: (action as AppSelected).app
+            }
+        }
+        case UnselectAppAction: {
+            return {
+                ...state,
+                selected: undefined
+            }
+        }
         default:
             return state
     }
-  }
+}
+
+export type AppsState = { apps: State }
+export default { apps: reducer }

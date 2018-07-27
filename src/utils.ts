@@ -1,0 +1,1 @@
+export const urlify = (label: string) => label.replace(" ", "-").toLowerCase()

@@ -6,6 +6,6 @@ const headers = {
     "Content-Type": "application/json"
 }
 
-const withHost = (route: string) => process.env.API_URL || "http://locahost:5000" + (route.startsWith("/") ? route : "/" + route)
+const withHost = (route: string) => process.env.NLU_TRAINER_API + (route.startsWith("/") ? route : "/" + route)
 
-export function get<T>(route: string): Observable<T> { return ajax.getJSON<T>(route, headers) }
+export function get<T>(route: string): Observable<T> { return ajax.getJSON<T>(withHost(route), headers) }

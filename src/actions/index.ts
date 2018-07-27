@@ -1,4 +1,8 @@
-import { Actions as TrainerActions } from '../trainer/actions'
 import { Actions as AppsActions } from '../apps/actions'
+import { Actions as IntentActions } from '../intents/actions'
+import { Actions as ExamplesActions } from '../examples/actions'
 
-export type Actions = TrainerActions | AppsActions
+export type StoreActions = 
+    | IntentActions 
+    | AppsActions 
+    | ExamplesActions

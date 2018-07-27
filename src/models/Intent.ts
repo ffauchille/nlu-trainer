@@ -1,21 +1,23 @@
 export class Intent {
-  id: string;
+  _id: string;
   name: string;
-  utterances: string[];
+  examples: string[];
 
   constructor(props: Partial<Intent>) {
-    this.id = props.id || "";
+    this._id = props._id || "";
     this.name = props.name || "";
-    this.utterances = props.utterances || [];
+    this.examples = props.examples || [];
   }
 }
 
 export class IntentCreation {
+    appId: string;
     name: string;
-    utterances: string[];
+    examples: string[];
 
     constructor(props: Partial<IntentCreation>) {
+        this.appId = props.appId || "";
         this.name = props.name || "no name";
-        this.utterances = props.utterances || [];
+        this.examples = props.examples || [];
     }
 }

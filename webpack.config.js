@@ -28,13 +28,7 @@ const devConfig = {
     hot: true,
     inline: true,
     // Display only errors to reduce the amount of output.
-    stats: "errors-only",
-    proxy: {
-      "/api": {
-        target: process.env.NLU_TRAINER_API,
-        pathRewrite: { "^/api": "" }
-      }
-    }
+    stats: "errors-only"
   }
 };
 
@@ -43,6 +37,7 @@ const prodConfig = {};
 const prodPlugins = [];
 
 module.exports = function(env) {
+  console.log("webpack config env is", env)
   let otherPlugins = env === "dev" ? devPlugins : prodPlugins;
   let otherConf = env === "dev" ? devConfig : prodConfig;
   return {
@@ -57,7 +52,7 @@ module.exports = function(env) {
       hints: false
     },
     devtool: "source-map",
-    mode: process.env.dev ? "devlopment" : "production",
+    mode: env === "dev" ? "devlopment" : "production",
     module: {
       rules: [
         {
