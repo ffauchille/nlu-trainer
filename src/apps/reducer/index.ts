@@ -1,5 +1,5 @@
 import { Reducer } from 'redux'
-import { Actions, AppsLoadedAction, AppsLoaded, AppSelectedAction, AppSelected, LoadAppsAction, UnselectAppAction } from '../actions'
+import { Actions, AppsLoadedAction, AppsLoaded, AppSelectedAction, AppSelected, LoadAppsAction, UnselectAppAction, AppCreatedAction, AppCreated } from '../actions'
 import { AppModel } from '../../models/app';
 
 type State = {

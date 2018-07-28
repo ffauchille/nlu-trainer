@@ -29,9 +29,42 @@ export function unselectApp(): UnselectApp {
     return { type: UnselectAppAction }
 }
 
+export type CreateApp = Action<string> & {
+    appCreate: Partial<AppModel>
+}
+export const CreateAppAction = "apps#CreateApp"
+export function createApp(appCreate: Partial<AppModel>): CreateApp {
+    return { type: CreateAppAction, appCreate }
+}
+
+export type AppCreated = Action<string> & {
+    app: AppModel
+}
+export const AppCreatedAction = "apps#AppCreated"
+export function appCreated(app: AppModel): AppCreated {
+    return { type: AppCreatedAction, app }
+}
+
+export type UpdateApp = Action<string> & {
+    appUpdated: AppModel
+}
+export const UpdateAppAction = "apps#UpdateApp"
+export function updateApp(appUpdated: AppModel): UpdateApp {
+    return { type: UpdateAppAction, appUpdated }
+}
+
+export type AppUpdated = Action<string> & {}
+export const AppUpdatedAction = "aps#AppUpdated"
+export function appUpdated(): AppUpdated {
+    return { type: AppUpdatedAction }
+}
 
 export type Actions = 
     | LoadApps 
     | AppsLoaded
     | AppSelected
     | UnselectApp
+    | CreateApp
+    | AppCreated
+    | UpdateApp
+    | AppUpdated

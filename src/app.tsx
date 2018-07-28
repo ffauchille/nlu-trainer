@@ -18,11 +18,12 @@ import "./app.css"
 const epicMiddleware = createEpicMiddleware();
 const history: History = createBrowserHistory();
 
-
+let middlewares = applyMiddleware(epicMiddleware, routerMiddleware(history))
+let tools = process.env.MODE === 'dev' ? composeWithDevTools(middlewares) : middlewares
 
 const store = createStore(
   connectRouter(history)(combineReducers(reducers)),
-  composeWithDevTools(applyMiddleware(epicMiddleware, routerMiddleware(history)))
+  tools
 );
 
 epicMiddleware.run(epics);

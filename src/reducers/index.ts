@@ -1,10 +1,14 @@
 import { default as intentReducer, IntentState} from "../intents/reducer"
 import { default as appsReducer, AppsState} from "../apps/reducer";
 import { default as examplesReducer, ExamplesState } from "../examples/reducer";
+import { reducer as formReducer } from "redux-form";
 import { RouterState } from "connected-react-router";
+
+type FormState = { form: any }
 
 export type StoreState =
     & RouterState
+    & FormState
     & IntentState
     & AppsState
     & ExamplesState
@@ -13,5 +17,6 @@ export type StoreState =
 export default {
     ...intentReducer,
     ...appsReducer,
-    ...examplesReducer
+    ...examplesReducer,
+    ...{ form: formReducer }
 }
