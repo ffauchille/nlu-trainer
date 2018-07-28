@@ -4,7 +4,7 @@ import { Grid, Container, Header, Button, Item, Icon } from "semantic-ui-react";
 import { AppModel } from "../models/app";
 import { bindActionCreators } from "redux";
 import { loadAppIntents, LoadAppIntents } from "./actions";
-import { Intent } from "../models/Intent";
+import { Intent } from "../models/intent";
 import ItemView from "../items";
 
 type IntentsOwnProps = React.Props<any> & {};

@@ -2,7 +2,7 @@ import { get, post } from "./common";
 import { map } from "../../node_modules/rxjs/operators";
 import { AppModel } from "../models/app";
 import { Observable } from "../../node_modules/rxjs";
-import { Intent } from "../models/Intent";
+import { Intent } from "../models/intent";
 
 
 export const getApps = (): Observable<AppModel[]> => get("/apps").pipe(map(r => r as AppModel[]))

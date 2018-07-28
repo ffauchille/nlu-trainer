@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { Intent } from "../../models/Intent";
+import { Intent } from "../../models/intent";
 import { NLUExample } from "../../models/example";
 
 export type LoadIntentExample = Action<string> & { intent: Intent }

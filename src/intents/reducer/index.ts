@@ -1,6 +1,6 @@
 import { Reducer } from "redux";
-import { AppIntentsLoadedAction, AppIntentsLoaded, Actions, UnselectIntentAction } from "../actions";
-import { Intent } from "../../models/Intent";
+import { AppIntentsLoadedAction, AppIntentsLoaded, UnselectIntentAction } from "../actions";
+import { Intent } from "../../models/intent";
 
 type State = {
   all: Intent[],

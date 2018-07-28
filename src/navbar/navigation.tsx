@@ -3,7 +3,7 @@ import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 import { Breadcrumb } from "semantic-ui-react";
 import { AppModel } from "../models/app";
-import { Intent } from "../models/Intent";
+import { Intent } from "../models/intent";
 import { bindActionCreators, Action } from "redux";
 import { push } from "connected-react-router";
 import { LocationState, LocationDescriptor } from "history";
