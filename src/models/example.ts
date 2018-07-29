@@ -1,11 +1,11 @@
 import { NLUEntity } from "./entity";
 
-export class NLUExample {
+export class Example {
     text: string;
     intent: string;
     entities: NLUEntity[];
 
-    constructor(props: Partial<NLUExample>) {
+    constructor(props: Partial<Example>) {
         this.text = props.text || ""
         this.intent = props.intent || ""
         this.entities = props.entities || []

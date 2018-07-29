@@ -4,10 +4,10 @@ import { Intent } from "../../models/intent";
 
 
 export type LoadAppIntents = Action<string> & {
-    app: AppModel
+    app: AppModel | string
 }
 export const LoadAppIntentsAction = "intents#LoadAppIntents"
-export function loadAppIntents(app: AppModel): LoadAppIntents {
+export function loadAppIntents(app: AppModel | string): LoadAppIntents {
     return { type: LoadAppIntentsAction, app }
 }
 
@@ -41,9 +41,18 @@ export function updateIntent(intentUpdated: Intent): UpdateIntent {
     return { type: UpdateIntentAction, intentUpdated }
 }
 
+export type IntentSelected = Action<string> & {
+    intent: Intent
+}
+export const IntentSelectedAction = "intents#IntentSelected"
+export function intentSelected(intent: Intent): IntentSelected {
+    return { type: IntentSelectedAction, intent }
+}
+
 export type Actions =
     | LoadAppIntents 
     | AppIntentsLoaded
     | UnselectIntent
     | CreateIntent
     | UpdateIntent
+    | IntentSelected

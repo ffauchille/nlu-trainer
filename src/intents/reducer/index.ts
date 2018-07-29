@@ -1,5 +1,5 @@
 import { Reducer } from "redux";
-import { AppIntentsLoadedAction, AppIntentsLoaded, UnselectIntentAction } from "../actions";
+import { AppIntentsLoadedAction, AppIntentsLoaded, UnselectIntentAction, IntentSelectedAction, IntentSelected } from "../actions";
 import { Intent } from "../../models/intent";
 
 type State = {
@@ -21,6 +21,12 @@ export const reducer: Reducer<State> = (
         ...state,
         all: (action as AppIntentsLoaded).intents
       };
+    }
+    case IntentSelectedAction: {
+      return {
+        ...state,
+        selected: (action as IntentSelected).intent
+      }
     }
     case UnselectIntentAction: {
       return {

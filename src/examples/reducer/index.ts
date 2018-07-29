@@ -1,9 +1,9 @@
 import { Reducer } from 'redux';
-import { NLUExample } from '../../models/example';
+import { Example } from '../../models/example';
 import { IntentExamplesLoadedAction, IntentExamplesLoaded } from '../actions';
 import { LoadAppIntentsAction } from '../../intents/actions';
 export type State = {
-  all: NLUExample[]
+  all: Example[]
   loading: boolean
 };
 

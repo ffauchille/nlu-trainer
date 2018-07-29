@@ -1,9 +1,9 @@
-import { NLUExample } from "./example";
+import { Example } from "./example";
 import { NLUEntitySynonym } from "./entity";
 
 export class NLUModel {
  
-    common_examples: NLUExample[]
+    common_examples: Example[]
     regex_features : NLURegexFeature[]
     entity_synonyms: NLUEntitySynonym[]
  

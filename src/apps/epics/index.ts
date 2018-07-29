@@ -3,7 +3,6 @@ import { Actions, LoadAppsAction, appsLoaded, AppsLoaded, AppSelectedAction, App
 import { Epic } from "redux-observable"
 import { map, flatMap } from "rxjs/operators"
 import { AppModel } from "../../models/app";
-import { Store } from "redux";
 import { push } from "connected-react-router";
 import { urlify } from "../../utils";
 import { StoreState } from "../../reducers";

@@ -20,6 +20,8 @@ interface IntentFormOwnProps extends React.Props<any> {
   editMode?: boolean;
   onCreateSubmit?: (input: Intent) => any;
   onUpdateSubmit?: (input: Intent) => any;
+  beforeCreate?: (input: any) => any;
+  beforeUpdate?: (input: any) => any;
 }
 
 interface IntentFormProps extends IntentFormOwnProps {
@@ -68,8 +70,15 @@ const IntentReduxForm = (initialValues: any) =>
   })(IntentForm);
 
 const IntentFormWrapper: React.StatelessComponent<IntentFormProps> = props => {
-  const submission = (input: Intent) => {
+  const submission = (i: Intent) => {
+    var input = i;
+    if (props.beforeCreate) {
+      input = props.beforeCreate(i)
+    }
     if (props.editMode) {
+      if (props.beforeUpdate) {
+        input = props.beforeUpdate(i)
+      }
       props.updateIntent(input);
       if (props.onUpdateSubmit) {
         props.onUpdateSubmit(input)

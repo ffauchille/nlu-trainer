@@ -10,6 +10,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import epics from "./epics";
 import Apps from "./apps/apps";
 import Intents from "./intents/intents";
+import Examples from "./examples/examples";
 import Layout from "./layout";
 
 import "../semantic/dist/semantic.min.css"
@@ -59,8 +60,9 @@ export class App extends React.Component<any, {}> {
         <Layout>
           <ConnectedRouter history={history}>
             <Switch>
-              <Route exact path="/apps" component={Apps} />
+              <Route path="/apps/:appId/:intentName" component={Examples} />
               <Route path="/apps/:appId" component={Intents} />
+              <Route exact path="/apps" component={Apps} />
               <Route component={Apps} />
             </Switch>
           </ConnectedRouter>
