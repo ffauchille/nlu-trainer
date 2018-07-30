@@ -27,10 +27,7 @@ const devConfig = {
     historyApiFallback: true,
     hot: true,
     inline: true,
-    // Display only errors to reduce the amount of output.
-    stats: "errors-only",
-    contentBase: path.resolve(__dirname)
-
+    stats: "errors-only"
   }
 };
 
@@ -39,7 +36,6 @@ const prodConfig = {};
 const prodPlugins = [];
 
 module.exports = function(env) {
-  console.log("webpack config env is", env)
   let otherPlugins = env === "dev" ? devPlugins : prodPlugins;
   let otherConf = env === "dev" ? devConfig : prodConfig;
   return {
@@ -48,12 +44,13 @@ module.exports = function(env) {
     },
     output: {
       path: path.resolve(__dirname, buildDir),
+      publicPath: "/",
       filename: "app.js"
     },
     performance: {
       hints: false
     },
-    mode: env === 'dev' ? "development" : "production",
+    mode: env === "dev" ? "development" : "production",
     devtool: "source-map",
     module: {
       rules: [
@@ -92,23 +89,18 @@ module.exports = function(env) {
         {
           test: /\.css$/,
           exclude: /node_modules/,
-          use: [ 
-            { loader: "style-loader"},
-            { loader: "css-loader"} 
-          ]
+          use: [{ loader: "style-loader" }, { loader: "css-loader" }]
         }
       ]
     },
     resolve: {
-      extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
-      modules: [path.resolve(__dirname), "node_modules"]
+      extensions: [".ts", ".tsx", ".js", ".jsx", ".json"]
     },
     plugins: [
       new htmlWebpack({
         title: pkg.description,
         appMountId: "app",
         template: "./index.html"
-        
       }),
       ...otherPlugins
     ],

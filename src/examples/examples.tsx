@@ -3,17 +3,23 @@ import { connect, Dispatch } from "react-redux";
 import { Grid, Container, Button, Icon, Modal } from "semantic-ui-react";
 import ItemsView from "../items";
 import { Example } from "../models/example";
-import { bindActionCreators } from "../../node_modules/redux";
+import { bindActionCreators, Action } from "redux";
 import { loadIntentExample, LoadIntentExample } from "./actions";
 import { StoreState } from "../reducers";
 import { Intent } from "../models/intent";
 import ExamplesForm from "./examplesform";
+import { LocationDescriptor, LocationState } from "history";
+import { push } from "connected-react-router";
 
 type ExamplesOwnProps = React.Props<any> & {};
 type ExamplesProps = ExamplesOwnProps & {
   examples: Example[];
   intent: Intent;
   loadExamples: (intent: Intent | string) => LoadIntentExample;
+  pushRoute: (
+    location: LocationDescriptor,
+    state?: LocationState
+  ) => Action;
 };
 type ExamplesState = {
   createMode: boolean;
@@ -29,7 +35,11 @@ class Examples extends React.Component<ExamplesProps, ExamplesState> {
   }
 
   componentWillMount() {
-    this.props.loadExamples(this.props.intent);
+    if (!this.props.intent) {
+      this.props.pushRoute("/")
+    } else {
+      this.props.loadExamples(this.props.intent);
+    }
   }
 
   renderExamplesForm() {
@@ -50,7 +60,7 @@ class Examples extends React.Component<ExamplesProps, ExamplesState> {
     closeOnEscape={false}
     closeOnTriggerBlur
   >
-    <Modal.Header>New Example for {this.props.intent.name}</Modal.Header>
+    <Modal.Header>New Example for {this.props.intent? this.props.intent.name : ""}</Modal.Header>
     <Modal.Content>
       <ExamplesForm
         onCreateSubmit={example => this.setState({ createMode: false })}
@@ -101,7 +111,8 @@ const mapStateToProps = (state: StoreState, ownProps: ExamplesOwnProps) => ({
   intent: state.intents.selected
 });
 const mapDispatcherToProps = (dispatch: Dispatch) => ({
-  loadExamples: bindActionCreators(loadIntentExample, dispatch)
+  loadExamples: bindActionCreators(loadIntentExample, dispatch),
+  pushRoute: bindActionCreators(push, dispatch)
 });
 
 export default connect(

@@ -22,7 +22,6 @@ type AppsProps = AppsOwnProps & {
   apps: AppModel[];
   loadApps: () => LoadApps;
   appSelected: (app: AppModel) => AppSelected;
-  pushRoute: any;
 };
 type AppsState = {
   createMode: boolean;
@@ -109,8 +108,7 @@ const mapStateToProps = (state: StoreState, ownProps: AppsOwnProps) => ({
 });
 const mapDispatcherToProps = (dispatch: Dispatch) => ({
   loadApps: bindActionCreators(loadApps, dispatch),
-  appSelected: bindActionCreators(appSelected, dispatch),
-  pushRoute: bindActionCreators(push, dispatch)
+  appSelected: bindActionCreators(appSelected, dispatch)
 });
 
 export default connect(

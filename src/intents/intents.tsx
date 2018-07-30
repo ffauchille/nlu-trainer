@@ -1,12 +1,14 @@
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
-import { Grid, Container, Header, Button, Item, Icon, Modal } from "semantic-ui-react";
+import { Grid, Container, Header, Button, Icon, Modal } from "semantic-ui-react";
 import { AppModel } from "../models/app";
-import { bindActionCreators } from "redux";
+import { bindActionCreators, Action } from "redux";
 import { loadAppIntents, LoadAppIntents, IntentSelected, intentSelected } from "./actions";
 import { Intent } from "../models/intent";
 import ItemView from "../items";
 import IntentsForm from "./intentsform";
+import { LocationDescriptor, LocationState } from "history";
+import { push } from "connected-react-router";
 
 type IntentsOwnProps = React.Props<any> & {};
 type IntentsProps = IntentsOwnProps & {
@@ -14,6 +16,10 @@ type IntentsProps = IntentsOwnProps & {
   intents: Intent[];
   loadAppIntents: (app: AppModel | string) => LoadAppIntents;
   intentSelected: (intent: Intent) => IntentSelected
+  pushRoute: (
+    location: LocationDescriptor,
+    state?: LocationState
+  ) => Action;
 };
 type IntentsState = {
   createMode: boolean;
@@ -29,6 +35,10 @@ class Intents extends React.Component<IntentsProps, IntentsState> {
   }
   
   componentWillMount() {
+    if (!this.props.app) {
+      // Handles refresh on pages
+      this.props.pushRoute("/");
+    }
     this.props.loadAppIntents(this.props.app);
   }
 
@@ -113,7 +123,8 @@ const mapStateToProps = (state: any, ownProps: IntentsOwnProps) => ({
 });
 const mapDispatcherToProps = (dispatch: Dispatch) => ({
   loadAppIntents: bindActionCreators(loadAppIntents, dispatch),
-  intentSelected: bindActionCreators(intentSelected, dispatch)
+  intentSelected: bindActionCreators(intentSelected, dispatch),
+  pushRoute: bindActionCreators(push, dispatch)
 });
 
 export default connect(

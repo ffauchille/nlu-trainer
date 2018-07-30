@@ -6,6 +6,7 @@ import { AppModel } from "../../models/app";
 import { push } from "connected-react-router";
 import { urlify } from "../../utils";
 import { StoreState } from "../../reducers";
+import { Action } from "redux";
 
 const loadAppsEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
     action$
@@ -13,10 +14,10 @@ const loadAppsEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
        .pipe(flatMap(_ => api.getApps()))
        .pipe(map<AppModel[], AppsLoaded>(apps => appsLoaded(apps)))
 
-const appSelectedEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
+const appSelectedEpic: Epic<Actions | Action, Actions | Action, StoreState, {}> = action$ =>
     action$
        .ofType(AppSelectedAction)
-       .pipe(map(a => push(`/apps/${urlify((a as AppSelected).app.name)}`, "router")))
+       .pipe(map<any, any>((a: AppSelected) => push(`/${urlify(a.app.name)}`, "router")))
 
 const createAppEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
   action$

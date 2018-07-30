@@ -38,7 +38,7 @@ class Navigation extends React.Component<NavigationProps, NavigationState> {
         link={this.props.appSelected !== undefined}
         active={this.props.appSelected === undefined}
         onClick={(e, d) => { 
-          this.props.pushRoute("/apps")
+          this.props.pushRoute("/")
           this.props.unselectApp()
           this.props.unselectIntent()
         }}
@@ -54,7 +54,7 @@ class Navigation extends React.Component<NavigationProps, NavigationState> {
           key="app-section"
           link
           onClick={(e, d) => { 
-            this.props.pushRoute("/apps/" + urlify(appName))
+            this.props.pushRoute("/" + urlify(appName))
             this.props.unselectIntent()
           }}
         >
@@ -68,7 +68,7 @@ class Navigation extends React.Component<NavigationProps, NavigationState> {
           <Breadcrumb.Section
             key="intent-link-section"
             link
-            onClick={(e, d) => this.props.pushRoute("/apps/" + urlify(appName) + "/" + urlify(intentName))}
+            onClick={(e, d) => this.props.pushRoute("/" + urlify(appName) + "/" + urlify(intentName))}
           >
             {intentName}
           </Breadcrumb.Section>,
