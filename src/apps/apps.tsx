@@ -1,9 +1,8 @@
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
-import { push } from "connected-react-router";
 import { bindActionCreators } from "../../node_modules/redux";
-import { loadApps, LoadApps, appSelected, AppSelected } from "./actions";
-import { AppModel } from "../models/app";
+import { loadApps, LoadApps, appSelected, AppSelected, StartAppTraining, startAppTraining } from "./actions";
+import { AppModel, AppModelType } from "../models/app";
 import {
   Grid,
   Container,
@@ -11,6 +10,7 @@ import {
   Button,
   Item,
   Icon,
+  Image,
   Modal
 } from "semantic-ui-react";
 import { StoreState } from "../reducers";
@@ -20,8 +20,10 @@ import AppsForm from "./appsform";
 type AppsOwnProps = React.Props<any> & {};
 type AppsProps = AppsOwnProps & {
   apps: AppModel[];
+  appsOnTraining: AppModel[];
   loadApps: () => LoadApps;
   appSelected: (app: AppModel) => AppSelected;
+  startAppTraining: (app: AppModel) => StartAppTraining
 };
 type AppsState = {
   createMode: boolean;
@@ -39,8 +41,16 @@ class Apps extends React.Component<AppsProps, AppsState> {
     this.props.loadApps();
   }
 
+  onAppTrainning(app: AppModel) {
+    this.props.startAppTraining(app)
+  }
+
   onAppSelected(app: AppModel) {
     this.props.appSelected(app);
+  }
+
+  appIsTraining(app: AppModel): boolean {
+    return this.props.appsOnTraining.findIndex(a => a._id === app._id) > -1
   }
 
   renderAppsFormModal() {
@@ -64,30 +74,58 @@ class Apps extends React.Component<AppsProps, AppsState> {
       >
         <Modal.Header>New App</Modal.Header>
         <Modal.Content>
-          <AppsForm  onCreateSubmit={app => this.setState({ createMode: false })} />
+          <AppsForm
+            onCreateSubmit={app => this.setState({ createMode: false })}
+          />
         </Modal.Content>
       </Modal>
     );
   }
 
+  renderModelType(typ: AppModelType) {
+    var elem;
+    switch (typ) {
+      case "RASA": {
+        elem = <Image src="/images/rasa.png" centered inline size="mini" />
+        break;
+      }
+      default: {
+        elem = <Icon name="code" size="large" color="violet"/>
+      }
+    }
+    return elem;
+  }
+
+  renderStatus(app: AppModel) {
+    var elem = <React.Fragment><Icon name="check" color="green" /> Ready</React.Fragment>
+    if (this.appIsTraining(app)) {
+      elem = <React.Fragment><Icon loading name="setting"/> Under training</React.Fragment>
+    }
+
+    return elem
+  }
+
   render() {
     return (
       <Container fluid>
-        { this.renderAppsFormModal() }
+        {this.renderAppsFormModal()}
         <ItemsView
           renderItem={(app: AppModel) => (
             <Item.Content>
               <Grid>
-                <Grid.Column width="6">
+                <Grid.Column width="4">
                   <Header size="small">
-                    <a onClick={e => this.onAppSelected(app)}>{app.name}</a>
+                    <a onClick={_ => this.onAppSelected(app)}>{app.name}</a>
                   </Header>
                 </Grid.Column>
-                <Grid.Column width="6">
-                  <Icon name="check" color="green" /> Ready
+                <Grid.Column width="4">
+                  { this.renderModelType(app.type) }
                 </Grid.Column>
                 <Grid.Column width="4">
-                  <Button basic color="black">
+                  { this.renderStatus(app) }
+                </Grid.Column>
+                <Grid.Column width="4">
+                  <Button loading={this.appIsTraining(app)} onClick={(e,d) => this.onAppTrainning(app)} basic color="black">
                     <Icon name="settings" color="black" />
                     Train
                   </Button>
@@ -104,11 +142,13 @@ class Apps extends React.Component<AppsProps, AppsState> {
 }
 
 const mapStateToProps = (state: StoreState, ownProps: AppsOwnProps) => ({
-  apps: state.apps.all
+  apps: state.apps.all,
+  appsOnTraining: state.apps.onTraining
 });
 const mapDispatcherToProps = (dispatch: Dispatch) => ({
   loadApps: bindActionCreators(loadApps, dispatch),
-  appSelected: bindActionCreators(appSelected, dispatch)
+  appSelected: bindActionCreators(appSelected, dispatch),
+  startAppTraining: bindActionCreators(startAppTraining, dispatch)
 });
 
 export default connect(

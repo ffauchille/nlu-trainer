@@ -23,6 +23,16 @@ export const getIntentExamples = (intent: Intent | string): Observable<Example[]
 export const createApp = (appCreate: Partial<AppModel>): Observable<any> => post("/apps", appCreate)
 export const createIntent = (intentCreate: Partial<Intent>): Observable<any> => post("/intents", intentCreate)
 export const createExample = (exampleCreate: Partial<Example>): Observable<any> => post("/examples", exampleCreate)
-
+export const trainApp = (app: AppModel): Observable<any> => {
+    var obs = of(app)
+    switch (app.type) {
+        case "RASA": {
+            obs = post("/rasa/models/train", { project: app.name })
+            break;
+        }
+        default:
+    }
+    return obs;
+}
 
 export const getStatus = get("/status")

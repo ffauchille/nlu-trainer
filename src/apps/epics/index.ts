@@ -1,5 +1,5 @@
 import * as api from "../../apis"
-import { Actions, LoadAppsAction, appsLoaded, AppsLoaded, AppSelectedAction, AppSelected, CreateAppAction, CreateApp, appCreated, loadApps } from "../actions"
+import { Actions, LoadAppsAction, appsLoaded, AppsLoaded, AppSelectedAction, AppSelected, CreateAppAction, CreateApp, appCreated, loadApps, StartAppTrainingAction, StartAppTraining, appTrained } from "../actions"
 import { Epic } from "redux-observable"
 import { map, flatMap } from "rxjs/operators"
 import { AppModel } from "../../models/app";
@@ -25,8 +25,16 @@ const createAppEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
     .pipe(flatMap(a => api.createApp((a as CreateApp).appCreate)))
     .pipe(map(_ => loadApps()))
 
+const startAppTrainingEpic: Epic<Actions, any> = action$ =>
+    action$
+       .ofType(StartAppTrainingAction)
+       .pipe(flatMap<any, any>((a: StartAppTraining) => api.trainApp(a.app).pipe(map( _ => a.app))))
+       .pipe(map(app => appTrained(app)))
+
+
 export default [
     loadAppsEpic,
     appSelectedEpic,
-    createAppEpic
+    createAppEpic,
+    startAppTrainingEpic
 ]

@@ -59,8 +59,22 @@ export function appUpdated(): AppUpdated {
     return { type: AppUpdatedAction }
 }
 
+export type StartAppTraining = Action<string> & { app: AppModel}
+export const StartAppTrainingAction = "apps#StartAppTraining"
+export function startAppTraining(app: AppModel): StartAppTraining {
+    return { type: StartAppTrainingAction, app }
+}
+
+export type AppTrained = Action<string> & {
+    app: AppModel
+}
+export const AppTrainedAction = "apps#AppTrained"
+export function appTrained(app: AppModel): AppTrained {
+    return { type: AppTrainedAction, app }
+}
+
 export type Actions = 
-    | LoadApps 
+    | LoadApps
     | AppsLoaded
     | AppSelected
     | UnselectApp
@@ -68,3 +82,4 @@ export type Actions =
     | AppCreated
     | UpdateApp
     | AppUpdated
+    | StartAppTraining

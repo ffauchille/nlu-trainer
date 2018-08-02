@@ -1,6 +1,6 @@
 import schema from "json-schema";
 
-type AppStatus = "ready" | "not-trained" | "empty"
+type RasaAppStatus = "ready" | "not-trained" | "empty"
 
 /** TODO: validate payload with JSON schema */
 const appModelSchema = {
@@ -12,13 +12,21 @@ const appModelSchema = {
     }
 }
 
+export type AppModelType = "RASA"
 
-export class AppModel {
+export interface AppModel {
     _id: string;
     name: string;
-    status: AppStatus;
+    type: AppModelType;
+}
 
-    constructor(props: Partial<AppModel>) {
+export class RasaApp implements AppModel {
+    _id: string;
+    name: string;
+    type: AppModelType = "RASA";
+    status: RasaAppStatus;
+
+    constructor(props: Partial<RasaApp>) {
         this._id = props._id || ""
         this.name = props.name || ""
         this.status = props.status || "not-trained"
