@@ -49,6 +49,18 @@ export function intentSelected(intent: Intent): IntentSelected {
     return { type: IntentSelectedAction, intent }
 }
 
+export type DeleteIntent = Action<string> & { intent: Intent }
+export const DeleteIntentAction = "intents#DeleteIntent"
+export function deleteIntent(intent: Intent): DeleteIntent {
+    return { type: DeleteIntentAction, intent }
+}
+
+export type intentDeleted = Action<string> & { intent: Intent }
+export const IntentDeletedAction = "intents#IntentDeleted"
+export function intentDeleted( intent: Intent ): intentDeleted {
+    return { type: IntentDeletedAction, intent }
+}
+
 export type Actions =
     | LoadAppIntents 
     | AppIntentsLoaded
@@ -56,3 +68,5 @@ export type Actions =
     | CreateIntent
     | UpdateIntent
     | IntentSelected
+    | DeleteIntent
+    | intentDeleted

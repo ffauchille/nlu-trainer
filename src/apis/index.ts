@@ -1,4 +1,4 @@
-import { get, post } from "./common";
+import { get, post, del } from "./common";
 import { map } from "rxjs/operators";
 import { AppModel } from "../models/app";
 import { Observable, of } from "rxjs";
@@ -27,12 +27,15 @@ export const trainApp = (app: AppModel): Observable<any> => {
     var obs = of(app)
     switch (app.type) {
         case "RASA": {
-            obs = post("/rasa/models/train", { project: app.name })
+            obs = post("/rasa/models/train", { project: app._id })
             break;
         }
         default:
     }
     return obs;
 }
+
+export const deleteIntent = (i: Intent) => del("/intents?intent=" + i._id)
+export const deleteExample = (ex: Example) => del("/examples?example=" + ex._id)
 
 export const getStatus = get("/status")

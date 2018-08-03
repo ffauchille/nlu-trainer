@@ -13,3 +13,7 @@ export function post<B, T>(route: string, body: B): Observable<T> {
     return ajax.post(withHost(route), body, headers)
                .pipe(map(r => r.response as T))
 }
+
+export function del<B, T>(route: string): Observable<T> {
+    return ajax.delete(withHost(route), headers).pipe(map(r => r.response as T))
+}

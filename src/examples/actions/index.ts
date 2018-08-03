@@ -28,8 +28,22 @@ export function updateExample(example: Example): UpdateExample {
     return { type: UpdateExampleAction, example }
 }
 
+export type DeleteExample = Action<string> & { example: Example }
+export const DeleteExampleAction = "example#DeleteExample"
+export function deleteExample(example: Example): DeleteExample {
+    return { type: DeleteExampleAction, example }
+}
+
+export type ExampleDeleted = Action<string> & { example: Example }
+export const ExampleDeletedAction = "example#ExampleDeleted"
+export function exampleDeleted(example: Example): ExampleDeleted {
+    return { type: ExampleDeletedAction, example }
+}
+
 export type Actions = 
     | LoadIntentExample
     | IntentExamplesLoaded
     | CreateExample
     | UpdateExample
+    | DeleteExample
+    | ExampleDeleted

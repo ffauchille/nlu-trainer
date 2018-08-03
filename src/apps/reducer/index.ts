@@ -10,18 +10,21 @@ import {
   AppTrainedAction,
   AppTrained
 } from "../actions";
-import { AppModel } from "../../models/app";
-import { removeAtIndex } from "../../utils";
+import { AppModel, AppStatus } from "../../models/app";
+import { removeAtIndex, findAllAndUpdate, normalize } from "../../utils";
+import { RasaStatusUpdatedAction, RasaStatusUpdated } from "../actions/rasa";
 
 type State = {
   all: AppModel[];
+  statuses: AppStatus[];
   selected?: AppModel;
   onTraining: AppModel[];
 };
 
 export const defaultState = (): State => ({
   all: [],
-  onTraining: []
+  onTraining: [],
+  statuses: []
 });
 
 export const reducer: Reducer<State> = (
@@ -59,6 +62,14 @@ export const reducer: Reducer<State> = (
         ...state,
         selected: undefined
       };
+    }
+    case RasaStatusUpdatedAction: {
+      let statusUpdates = (action as RasaStatusUpdated).status.available_projects
+      let appsToBeUpdate = (state.all.filter(app => normalize(app.name) in statusUpdates))
+      return {
+        ...state,
+        statuses: appsToBeUpdate.map(a => ({ app: a, status: (statusUpdates[normalize(a.name)]).status }))
+      }
     }
     default:
       return state;

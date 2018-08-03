@@ -15,6 +15,10 @@ import Layout from "./layout";
 
 import "../semantic/dist/semantic.min.css"
 import "./app.css"
+import { startPolling } from "./utils";
+import { map } from "../node_modules/rxjs/operators";
+import { Subscription } from "../node_modules/rxjs";
+import { rasaStatusUpdated } from "./apps/actions/rasa";
 
 const epicMiddleware = createEpicMiddleware();
 const history: History = createBrowserHistory();
@@ -31,6 +35,13 @@ epicMiddleware.run(epics);
 
 
 export class App extends React.Component<any, {}> {
+  rasaStatusPoll$: Subscription
+  
+  constructor(props) {
+    super(props);
+    this.rasaStatusPoll$ = startPolling("/rasa/models/status", 3000).pipe(map(status => store.dispatch(rasaStatusUpdated(status)))).subscribe()
+  }
+
   render() {
     console.log("rendering App");
     return (
@@ -47,5 +58,9 @@ export class App extends React.Component<any, {}> {
         </Layout>
       </Provider>
     );
+  }
+
+  componentWillUnmount() {
+    this.rasaStatusPoll$.unsubscribe();
   }
 }

@@ -1,6 +1,7 @@
 import { Reducer } from "redux";
-import { AppIntentsLoadedAction, AppIntentsLoaded, UnselectIntentAction, IntentSelectedAction, IntentSelected } from "../actions";
+import { AppIntentsLoadedAction, AppIntentsLoaded, UnselectIntentAction, IntentSelectedAction, IntentSelected, intentDeleted, IntentDeletedAction } from "../actions";
 import { Intent } from "../../models/intent";
+import { removeAtIndex } from "../../utils";
 
 type State = {
   all: Intent[],
@@ -32,6 +33,12 @@ export const reducer: Reducer<State> = (
       return {
         ...state,
         selected: undefined
+      }
+    }
+    case IntentDeletedAction: {
+      return {
+        ...state,
+        all: removeAtIndex(state.all, i => i._id === (action as intentDeleted).intent._id)
       }
     }
     default: {

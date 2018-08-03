@@ -1,10 +1,10 @@
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
-import { Grid, Container, Button, Icon, Modal } from "semantic-ui-react";
+import { Grid, Container, Button, Icon, Modal, Header } from "semantic-ui-react";
 import ItemsView from "../items";
 import { Example } from "../models/example";
 import { bindActionCreators, Action } from "redux";
-import { loadIntentExample, LoadIntentExample } from "./actions";
+import { loadIntentExample, LoadIntentExample, deleteExample, DeleteExample } from "./actions";
 import { StoreState } from "../reducers";
 import { Intent } from "../models/intent";
 import ExamplesForm from "./examplesform";
@@ -15,6 +15,7 @@ type ExamplesOwnProps = React.Props<any> & {};
 type ExamplesProps = ExamplesOwnProps & {
   examples: Example[];
   intent: Intent;
+  deleteExample: (e:Example) => DeleteExample;
   loadExamples: (intent: Intent | string) => LoadIntentExample;
   pushRoute: (
     location: LocationDescriptor,
@@ -64,7 +65,7 @@ class Examples extends React.Component<ExamplesProps, ExamplesState> {
     <Modal.Content>
       <ExamplesForm
         onCreateSubmit={example => this.setState({ createMode: false })}
-        beforeCreate={ pl => ({ ...pl, intent: this.props.intent._id })}
+        beforeCreate={ pl => ({ ...pl, intentId: this.props.intent._id, intentName: this.props.intent.name })}
       />
     </Modal.Content>
   </Modal>
@@ -74,22 +75,17 @@ class Examples extends React.Component<ExamplesProps, ExamplesState> {
     return <ItemsView
       data={this.props.examples}
       emptyDataMessage={" No examples yet "}
-      renderItem={e => (
+      renderItem={ex => (
         <Grid>
-          <Grid.Column width="8">{e.text}</Grid.Column>
+          <Grid.Column width="8">{ex.text}</Grid.Column>
           <Grid.Column width="4">
             <Icon name="tag" color="black" />
-            {e.intent}
+            {ex.intentName}
           </Grid.Column>
           <Grid.Column width="4">
-            <Button.Group>
-            <Button basic color="black" onClick={(e, d) => {}}>
-              <Icon name="edit" />Edit
-            </Button>
-            <Button basic onClick={(e, d) => {}}>
+            <Button basic onClick={(e, d) => {this.props.deleteExample(ex)}}>
               <Icon name="trash" />Delete
             </Button>
-            </Button.Group>
           </Grid.Column>
         </Grid>
       )}
@@ -112,6 +108,7 @@ const mapStateToProps = (state: StoreState, ownProps: ExamplesOwnProps) => ({
 });
 const mapDispatcherToProps = (dispatch: Dispatch) => ({
   loadExamples: bindActionCreators(loadIntentExample, dispatch),
+  deleteExample: bindActionCreators(deleteExample, dispatch),
   pushRoute: bindActionCreators(push, dispatch)
 });
 

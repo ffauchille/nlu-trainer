@@ -1,7 +1,8 @@
 import { Reducer } from 'redux';
 import { Example } from '../../models/example';
-import { IntentExamplesLoadedAction, IntentExamplesLoaded } from '../actions';
+import { IntentExamplesLoadedAction, IntentExamplesLoaded, ExampleDeletedAction, ExampleDeleted } from '../actions';
 import { LoadAppIntentsAction } from '../../intents/actions';
+import { removeAtIndex } from '../../utils';
 export type State = {
   all: Example[]
   loading: boolean
@@ -25,6 +26,12 @@ export const reducer: Reducer<State> = (
           ...state,
           all: (action as IntentExamplesLoaded).examples,
           loading: false
+        }
+      }
+      case ExampleDeletedAction: {
+        return {
+          ...state,
+          all: removeAtIndex(state.all, e => e._id === (action as ExampleDeleted).example._id)
         }
       }
       default: {

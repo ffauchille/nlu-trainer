@@ -1,5 +1,6 @@
 import { Action } from "redux";
 import { AppModel } from "../../models/app";
+import { RasaStatusUpdated } from "./rasa";
 
 export type LoadApps = Action<string>
 export const LoadAppsAction = "apps#loadApps"
@@ -83,3 +84,4 @@ export type Actions =
     | UpdateApp
     | AppUpdated
     | StartAppTraining
+    | RasaStatusUpdated

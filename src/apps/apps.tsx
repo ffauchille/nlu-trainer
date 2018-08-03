@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 import { bindActionCreators } from "../../node_modules/redux";
 import { loadApps, LoadApps, appSelected, AppSelected, StartAppTraining, startAppTraining } from "./actions";
-import { AppModel, AppModelType } from "../models/app";
+import { AppModel, AppModelType, AppStatus } from "../models/app";
 import {
   Grid,
   Container,
@@ -16,6 +16,7 @@ import {
 import { StoreState } from "../reducers";
 import ItemsView from "../items";
 import AppsForm from "./appsform";
+import Status from "./appstatus";
 
 type AppsOwnProps = React.Props<any> & {};
 type AppsProps = AppsOwnProps & {
@@ -49,8 +50,9 @@ class Apps extends React.Component<AppsProps, AppsState> {
     this.props.appSelected(app);
   }
 
+
   appIsTraining(app: AppModel): boolean {
-    return this.props.appsOnTraining.findIndex(a => a._id === app._id) > -1
+    return this.props.appsOnTraining.findIndex(a => a._id === app._id) > -1;
   }
 
   renderAppsFormModal() {
@@ -97,12 +99,7 @@ class Apps extends React.Component<AppsProps, AppsState> {
   }
 
   renderStatus(app: AppModel) {
-    var elem = <React.Fragment><Icon name="check" color="green" /> Ready</React.Fragment>
-    if (this.appIsTraining(app)) {
-      elem = <React.Fragment><Icon loading name="setting"/> Under training</React.Fragment>
-    }
-
-    return elem
+    return <Status app={app} />
   }
 
   render() {
@@ -125,7 +122,7 @@ class Apps extends React.Component<AppsProps, AppsState> {
                   { this.renderStatus(app) }
                 </Grid.Column>
                 <Grid.Column width="4">
-                  <Button loading={this.appIsTraining(app)} onClick={(e,d) => this.onAppTrainning(app)} basic color="black">
+                  <Button disabled={this.appIsTraining(app)} onClick={(e,d) => this.onAppTrainning(app)} basic color="black">
                     <Icon name="settings" color="black" />
                     Train
                   </Button>
