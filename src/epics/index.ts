@@ -1,13 +1,16 @@
 import { combineEpics, Epic } from "redux-observable";
+import { catchError } from "rxjs/operators";
+
 import appsEpics from "../apps/epics";
 import intentsEpics from "../intents/epics";
 import examplesEpics from "../examples/epics";
-import { catchError } from "rxjs/operators";
+import testboxEpics from "../testbox/epics";
 
 const epics: any[] = [
   ...appsEpics,
   ...intentsEpics,
-  ...examplesEpics
+  ...examplesEpics,
+  ...testboxEpics
 ]
 
 

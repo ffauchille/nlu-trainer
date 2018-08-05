@@ -28,6 +28,10 @@ class TestBox extends React.Component<TestBoxProps, TestBoxState> {
     };
   }
 
+  get app(): AppModel { 
+    return this.props.app || { _id: "", name: "", type: "RASA" }
+  }
+
   componentWillMount() {
     if (!this.props.app) {
       this.props.pushRoute("/");
@@ -40,7 +44,7 @@ class TestBox extends React.Component<TestBoxProps, TestBoxState> {
       elem = <BatchPane />;
     }
     if (this.state.active === "Live") {
-      elem = <LivePane />;
+      elem = <LivePane app={this.app}/>;
     }
     return elem;
   }
@@ -54,12 +58,13 @@ class TestBox extends React.Component<TestBoxProps, TestBoxState> {
       <Grid>
         <Grid.Row>
           <Grid.Column width="7" textAlign="right">
-            <Label basic color={this.radioColor("Live")} onClick={(e,d) => this.setState({ active: 'Live' })}>
+            <Label as="a" basic color={this.radioColor("Live")} onClick={(e,d) => this.setState({ active: 'Live' })}>
               Live
             </Label>
           </Grid.Column>
           <Grid.Column width="2" textAlign="center">
             <Radio
+              disabled
               onClick={(e, d) =>
                 this.setState({
                   active: this.state.active === "Live" ? "Batch" : "Live"
@@ -70,7 +75,7 @@ class TestBox extends React.Component<TestBoxProps, TestBoxState> {
             />
           </Grid.Column>
           <Grid.Column width="7" textAlign="left">
-            <Label basic color={this.radioColor("Batch")} onClick={(e,d) => this.setState({ active: 'Batch' })}>
+            <Label as="a" basic color={this.radioColor("Batch")} onClick={(e,d) => console.error("not implemented yet") /** this.setState({ active: 'Batch' }) */}>
               Batch
             </Label>
           </Grid.Column>

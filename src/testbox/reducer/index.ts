@@ -1,13 +1,37 @@
 import { Reducer } from 'redux';
 import { AppModel } from '../../models/app';
-import { TestAppAction, TestApp } from '../actions';
+import { TestAppAction, TestApp, PredictionAction, Prediction, PredictAction, Predict } from '../actions';
 import { UnselectAppAction } from '../../apps/actions';
 
+type IntentScore = {
+    name: string;
+    confidence: number;
+}
+export type PredictionResult = {
+  intent: IntentScore;
+  entities: any[];
+  intent_ranking: IntentScore[];
+  text: string;
+  project: string; /** RASA Project name === the app's name normalized */
+  model: string; /** RASA Model version use for the prediction */
+}
+export type ChatMessage = {
+    type: 'predict' | 'prediction';
+    text: string;
+    score?: number;
+};
+
+type LiveState = {
+    messageLog: ChatMessage[]
+}
 type State = {
-    app?: AppModel
+    app?: AppModel;
+    live: LiveState;
 }
 const defaultState: State = {
-    
+    live: {
+        messageLog: []
+    }
 };
 
 export const reducer: Reducer<State> = (
@@ -25,6 +49,34 @@ export const reducer: Reducer<State> = (
         return {
             ...state,
             app: undefined
+        }
+    }
+    case PredictAction: {
+        let predictMessage: ChatMessage = { 
+            type: 'predict',
+            text: (action as Predict).text
+        }
+        return { 
+            ...state,
+            live: {
+                ...state.live,
+                messageLog: [ ...state.live.messageLog, predictMessage ]
+            }
+        }
+    }
+    case PredictionAction: {
+        let prediction = (action as Prediction).prediction
+        let predictionMessage: ChatMessage = {
+            type: 'prediction',
+            text: prediction.intent.name,
+            score: prediction.intent.confidence
+        }
+        return {
+            ...state,
+            live: {
+                ...state.live,
+                messageLog: [ ...state.live.messageLog, predictionMessage]
+            }
         }
     }
     default:

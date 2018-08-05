@@ -4,6 +4,7 @@ import { AppModel } from "../models/app";
 import { Observable, of } from "rxjs";
 import { Intent } from "../models/intent";
 import { Example } from "../models/example";
+import { normalize } from "../utils";
 
 
 export const getApps = (): Observable<AppModel[]> => get("/apps").pipe(map(r => r as AppModel[]))
@@ -33,6 +34,14 @@ export const trainApp = (app: AppModel): Observable<any> => {
         default:
     }
     return obs;
+}
+
+export const predict = (app: AppModel, text: string): Observable<any> => {
+    var obs = of({})
+    if (app.type === "RASA") {
+        obs = post("/rasa/models/predict", { project: normalize(app.name), text })
+    }
+    return obs
 }
 
 export const deleteIntent = (i: Intent) => del("/intents?intent=" + i._id)
