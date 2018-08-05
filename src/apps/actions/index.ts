@@ -74,6 +74,18 @@ export function appTrained(app: AppModel): AppTrained {
     return { type: AppTrainedAction, app }
 }
 
+export type DeleteApp = Action<string> & { app: AppModel }
+export const DeleteAppAction = "apps#DeleteApp"
+export function deleteApp(app: AppModel): DeleteApp {
+    return { type: DeleteAppAction, app }
+}
+
+export type AppDeleted = Action<string> & { app: AppModel }
+export const AppDeletedAction = "apps#AppDeleted"
+export function appDeleted( app: AppModel ): AppDeleted {
+    return { type: AppDeletedAction, app }
+}
+
 export type Actions = 
     | LoadApps
     | AppsLoaded
@@ -85,3 +97,5 @@ export type Actions =
     | AppUpdated
     | StartAppTraining
     | RasaStatusUpdated
+    | DeleteApp
+    | AppDeleted

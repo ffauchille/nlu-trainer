@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
 import { bindActionCreators } from "../../node_modules/redux";
-import { loadApps, LoadApps, appSelected, AppSelected, StartAppTraining, startAppTraining } from "./actions";
+import { loadApps, LoadApps, appSelected, AppSelected, StartAppTraining, startAppTraining, DeleteApp, deleteApp } from "./actions";
 import { AppModel, AppModelType, AppStatus } from "../models/app";
 import {
   Grid,
@@ -23,18 +23,21 @@ type AppsProps = AppsOwnProps & {
   apps: AppModel[];
   appsOnTraining: AppModel[];
   loadApps: () => LoadApps;
+  deleteApp: (app: AppModel) => DeleteApp;
   appSelected: (app: AppModel) => AppSelected;
   startAppTraining: (app: AppModel) => StartAppTraining
 };
 type AppsState = {
   createMode: boolean;
+  deleteMode: boolean;
 };
 
 class Apps extends React.Component<AppsProps, AppsState> {
   constructor(props) {
     super(props);
     this.state = {
-      createMode: false
+      createMode: false,
+      deleteMode: false
     };
   }
 
@@ -53,6 +56,36 @@ class Apps extends React.Component<AppsProps, AppsState> {
 
   appIsTraining(app: AppModel): boolean {
     return this.props.appsOnTraining.findIndex(a => a._id === app._id) > -1;
+  }
+
+  renderConfirmDelete( app: AppModel ) {
+    return (
+      <Modal
+        size="small"
+        basic
+        trigger={<Button basic disabled={this.appIsTraining(app)} onClick={(e,d) => this.setState( { deleteMode: true } )}><Icon name="trash" />Delete</Button>}
+        open={ this.state.deleteMode }
+        closeOnEscape
+      >
+      <Header icon="archive" content="Are you sure ?" />
+        <Modal.Content>
+          <p>
+            By deleting { app.name }, you are also deleting all of its intents
+          </p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button basic color="red" inverted onClick={(e,d) => {
+            this.props.deleteApp(app);
+            this.setState({ deleteMode: false })
+          }}>
+            <Icon name="remove" /> Yes, remove { app.name} and all its intents
+          </Button>
+          <Button color="green" inverted onClick={(e,d) => this.setState( { deleteMode: false })}>
+            <Icon name="checkmark" /> No, I want to keep { app.name }
+          </Button>
+        </Modal.Actions>
+      </Modal>
+    )
   }
 
   renderAppsFormModal() {
@@ -118,14 +151,18 @@ class Apps extends React.Component<AppsProps, AppsState> {
                 <Grid.Column width="4">
                   { this.renderModelType(app.type) }
                 </Grid.Column>
-                <Grid.Column width="4">
+                <Grid.Column width="3">
                   { this.renderStatus(app) }
                 </Grid.Column>
-                <Grid.Column width="4">
+                <Grid.Column width="5">
                   <Button disabled={this.appIsTraining(app)} onClick={(e,d) => this.onAppTrainning(app)} basic color="black">
                     <Icon name="settings" color="black" />
                     Train
                   </Button>
+                  <Button.Group>
+                    <Button basic disabled color="black"><Icon name="edit"/> Edit</Button>
+                    {this.renderConfirmDelete(app)}
+                  </Button.Group>
                 </Grid.Column>
               </Grid>
             </Item.Content>
@@ -145,7 +182,8 @@ const mapStateToProps = (state: StoreState, ownProps: AppsOwnProps) => ({
 const mapDispatcherToProps = (dispatch: Dispatch) => ({
   loadApps: bindActionCreators(loadApps, dispatch),
   appSelected: bindActionCreators(appSelected, dispatch),
-  startAppTraining: bindActionCreators(startAppTraining, dispatch)
+  startAppTraining: bindActionCreators(startAppTraining, dispatch),
+  deleteApp: bindActionCreators(deleteApp, dispatch)
 });
 
 export default connect(

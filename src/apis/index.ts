@@ -37,5 +37,6 @@ export const trainApp = (app: AppModel): Observable<any> => {
 
 export const deleteIntent = (i: Intent) => del("/intents?intent=" + i._id)
 export const deleteExample = (ex: Example) => del("/examples?example=" + ex._id)
+export const deleteApp = (app: AppModel) => del("/apps?app=" + app._id)
 
 export const getStatus = get("/status")

@@ -31,24 +31,38 @@ interface AppsFormProps extends AppsFormOwnProps {
   updateApp: (updt: AppModel) => UpdateApp;
 }
 
-const appsFormField = {
-  component: "input",
-  name: "name",
-  label: "App name",
-  placeholder: "My awsome app"
-};
+const appsFormFields = [
+  {
+    component: "input",
+    name: "name",
+    label: "App name",
+    placeholder: "My awsome app"
+  },
+  {
+    component: "select",
+    name: "type",
+    label: "App type",
+    placeholder: "Select an app type",
+    multipleOptions: [
+      { text: "RASA", value: "RASA" }
+    ]
+  }
+]
 
 const validate = values => {
   const errors: any = {};
   if (!values.name) {
     errors.name = "An app name is required";
   }
+  if (!values.type) {
+    errors.type = "An app type is required";
+  }
   return errors;
 };
 
 const AppsForm = (props: AppsFormProps) => (
   <Form onSubmit={props.handleSubmit}>
-    {renderField(appsFormField)}
+    { appsFormFields.map((appF, idx) => renderField(appF, `appsform-field-${idx}`)) }
     <Button
       type="submit"
       onSubmit={props.onSubmit}

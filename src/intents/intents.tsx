@@ -35,7 +35,7 @@ type IntentsProps = IntentsOwnProps & {
 };
 type IntentsState = {
   createMode: boolean;
-  delModalActive: boolean;
+  deleteMode: boolean;
 };
 
 class Intents extends React.Component<IntentsProps, IntentsState> {
@@ -43,7 +43,7 @@ class Intents extends React.Component<IntentsProps, IntentsState> {
     super(props);
     this.state = {
       createMode: false,
-      delModalActive: false
+      deleteMode: false
     };
   }
 
@@ -63,30 +63,30 @@ class Intents extends React.Component<IntentsProps, IntentsState> {
     return (
       <Modal
         trigger={
-          <Button basic onClick={(e,d) => this.setState({ delModalActive: true })}>
+          <Button basic onClick={(e,d) => this.setState({ deleteMode: true })}>
             <Icon name="trash" />Delete
           </Button>
         }
         basic
-        open={this.state.delModalActive}
+        open={this.state.deleteMode}
         size="small"
       >
         <Header icon="archive" content="Are you sure ?" />
         <Modal.Content>
           <p>
-            By deleting this intent, you are also deleting all of this intent's
+            By deleting { i.name }, you are also deleting all of this intent's
             examples.
           </p>
         </Modal.Content>
         <Modal.Actions>
           <Button basic color="red" inverted onClick={(e,d) => {
             this.props.deleteIntent(i);
-            this.setState({ delModalActive: false })
+            this.setState({ deleteMode: false })
           }}>
-            <Icon name="remove" /> Yes, remove this intent and all its examples
+            <Icon name="remove" /> Yes, remove { i.name } and all its examples
           </Button>
-          <Button color="green" inverted onClick={(e,d) => this.setState( { delModalActive: false })}>
-            <Icon name="checkmark" /> No, I want to keep it
+          <Button color="green" inverted onClick={(e,d) => this.setState( { deleteMode: false })}>
+            <Icon name="checkmark" /> No, I want to keep { i.name }
           </Button>
         </Modal.Actions>
       </Modal>

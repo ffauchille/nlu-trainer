@@ -8,7 +8,9 @@ import {
   StartAppTrainingAction,
   StartAppTraining,
   AppTrainedAction,
-  AppTrained
+  AppTrained,
+  AppDeletedAction,
+  AppDeleted
 } from "../actions";
 import { AppModel, AppStatus } from "../../models/app";
 import { removeAtIndex, findAllAndUpdate, normalize } from "../../utils";
@@ -69,6 +71,12 @@ export const reducer: Reducer<State> = (
       return {
         ...state,
         statuses: appsToBeUpdate.map(a => ({ app: a, status: (statusUpdates[normalize(a.name)]).status }))
+      }
+    }
+    case AppDeletedAction:{
+      return {
+        ...state,
+        all: removeAtIndex(state.all, app => app._id === (action as AppDeleted).app._id)
       }
     }
     default:
