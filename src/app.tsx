@@ -9,6 +9,7 @@ import { createEpicMiddleware } from "redux-observable";
 import { composeWithDevTools } from "redux-devtools-extension";
 import epics from "./epics";
 import Apps from "./apps/apps";
+import TestBox from "./testbox/testbox";
 import Intents from "./intents/intents";
 import Examples from "./examples/examples";
 import Layout from "./layout";
@@ -49,6 +50,7 @@ export class App extends React.Component<any, {}> {
         <Layout>
           <ConnectedRouter history={history}>
             <Switch>
+              <Route path="/testbox/:appId" component={TestBox}/>
               <Route path="/:appId/:intentName" component={Examples} />
               <Route path="/:appId" component={Intents} />
               <Route path="/" component={Apps} />

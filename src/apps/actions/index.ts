@@ -19,7 +19,6 @@ export function appsLoaded(apps: AppModel[]): AppsLoaded {
 export const AppSelectedAction = "apps#appSelected"
 export type AppSelected = Action<string> & { app: AppModel }
 
-
 export function appSelected(app: AppModel): AppSelected {
     return { type: AppSelectedAction, app }
 }

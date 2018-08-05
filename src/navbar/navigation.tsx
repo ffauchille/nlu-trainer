@@ -17,6 +17,7 @@ type NavigationOwnProps = React.Props<any> & {};
 type NavigationProps = NavigationOwnProps & {
   appSelected?: AppModel;
   intentSelected?: Intent;
+  testingApp?: AppModel;
 
   pushRoute: (
     location: LocationDescriptor,
@@ -82,13 +83,20 @@ class Navigation extends React.Component<NavigationProps, NavigationState> {
         );
       }
     }
+    if (this.props.testingApp) {
+      sections.push(
+        divider(1),
+      <Breadcrumb.Section key="testbox-app-section" active link={false}>{this.props.testingApp.name}
+      </Breadcrumb.Section>)
+    }
     return <Breadcrumb size="large">{sections}</Breadcrumb>;
   }
 }
 
 const mapStateToProps = (state: StoreState, ownProps: NavigationOwnProps) => ({
     appSelected: state.apps.selected,
-    intentSelected: state.intents.selected
+    intentSelected: state.intents.selected,
+    testingApp: state.testbox.app
 });
 const mapDispatcherToProps = (dispatch: Dispatch) => ({
   pushRoute: bindActionCreators(push, dispatch),
