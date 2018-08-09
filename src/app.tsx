@@ -17,8 +17,8 @@ import Layout from "./layout";
 import "../semantic/dist/semantic.min.css"
 import "./app.css"
 import { startPolling } from "./utils";
-import { map } from "../node_modules/rxjs/operators";
-import { Subscription } from "../node_modules/rxjs";
+import { map } from "rxjs/operators";
+import { Subscription } from "rxjs";
 import { rasaStatusUpdated } from "./apps/actions/rasa";
 
 const epicMiddleware = createEpicMiddleware();
@@ -44,7 +44,6 @@ export class App extends React.Component<any, {}> {
   }
 
   render() {
-    console.log("rendering App");
     return (
       <Provider store={store}>
         <Layout>

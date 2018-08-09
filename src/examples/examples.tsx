@@ -75,7 +75,7 @@ class Examples extends React.Component<ExamplesProps, ExamplesState> {
     return <ItemsView
       data={this.props.examples}
       emptyDataMessage={" No examples yet "}
-      renderItem={ex => (
+      renderItem={(ex, idx) => (
         <Grid>
           <Grid.Column width="8">{ex.text}</Grid.Column>
           <Grid.Column width="4">

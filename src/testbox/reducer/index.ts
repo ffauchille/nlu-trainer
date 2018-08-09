@@ -22,7 +22,8 @@ export type ChatMessage = {
 };
 
 type LiveState = {
-    messageLog: ChatMessage[]
+    messageLog: ChatMessage[];
+    predicting: boolean;
 }
 type State = {
     app?: AppModel;
@@ -30,7 +31,8 @@ type State = {
 }
 const defaultState: State = {
     live: {
-        messageLog: []
+        messageLog: [],
+        predicting: false
     }
 };
 
@@ -60,7 +62,8 @@ export const reducer: Reducer<State> = (
             ...state,
             live: {
                 ...state.live,
-                messageLog: [ ...state.live.messageLog, predictMessage ]
+                messageLog: [ ...state.live.messageLog, predictMessage ],
+                predicting: true
             }
         }
     }
@@ -75,7 +78,8 @@ export const reducer: Reducer<State> = (
             ...state,
             live: {
                 ...state.live,
-                messageLog: [ ...state.live.messageLog, predictionMessage]
+                messageLog: [ ...state.live.messageLog, predictionMessage],
+                predicting: false
             }
         }
     }

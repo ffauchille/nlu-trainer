@@ -33,9 +33,10 @@ type IntentsProps = IntentsOwnProps & {
   intentSelected: (intent: Intent) => IntentSelected;
   pushRoute: (location: LocationDescriptor, state?: LocationState) => Action;
 };
+
 type IntentsState = {
   createMode: boolean;
-  deleteMode: boolean;
+  deleteMode: string;
 };
 
 class Intents extends React.Component<IntentsProps, IntentsState> {
@@ -43,7 +44,7 @@ class Intents extends React.Component<IntentsProps, IntentsState> {
     super(props);
     this.state = {
       createMode: false,
-      deleteMode: false
+      deleteMode: ""
     };
   }
 
@@ -59,16 +60,17 @@ class Intents extends React.Component<IntentsProps, IntentsState> {
     this.props.intentSelected(intent);
   }
 
-  confirmIntentDelete(i: Intent) {
+  confirmIntentDelete(i: Intent, idx: number) {
+    let modalId = `confirm-delete-${idx}`
     return (
       <Modal
         trigger={
-          <Button basic onClick={(e,d) => this.setState({ deleteMode: true })}>
+          <Button basic onClick={(e,d) => this.setState({ deleteMode: modalId })}>
             <Icon name="trash" />Delete
           </Button>
         }
         basic
-        open={this.state.deleteMode}
+        open={this.state.deleteMode === modalId}
         size="small"
       >
         <Header icon="archive" content="Are you sure ?" />
@@ -81,11 +83,11 @@ class Intents extends React.Component<IntentsProps, IntentsState> {
         <Modal.Actions>
           <Button basic color="red" inverted onClick={(e,d) => {
             this.props.deleteIntent(i);
-            this.setState({ deleteMode: false })
+            this.setState({ deleteMode: "" })
           }}>
             <Icon name="remove" /> Yes, remove { i.name } and all its examples
           </Button>
-          <Button color="green" inverted onClick={(e,d) => this.setState( { deleteMode: false })}>
+          <Button color="green" inverted onClick={(e,d) => this.setState( { deleteMode: "" })}>
             <Icon name="checkmark" /> No, I want to keep { i.name }
           </Button>
         </Modal.Actions>
@@ -105,7 +107,7 @@ class Intents extends React.Component<IntentsProps, IntentsState> {
     );
     return (
       <ItemView
-        renderItem={intent => (
+        renderItem={(intent, idx) => (
           <Grid>
             <Grid.Column width="12">
               <a onClick={e => this.onIntentSelected(intent)}>{intent.name}</a>
@@ -115,7 +117,7 @@ class Intents extends React.Component<IntentsProps, IntentsState> {
                 <Button disabled basic color="black">
                   <Icon name="edit" />Edit
                 </Button>
-                { this.confirmIntentDelete(intent) }
+                { this.confirmIntentDelete(intent, idx) }
               </Button.Group>
             </Grid.Column>
           </Grid>

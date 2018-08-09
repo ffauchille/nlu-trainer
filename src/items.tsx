@@ -2,7 +2,7 @@ import * as React from "react";
 import { Item } from "semantic-ui-react";
 
 type ItemsViewProps<T> = React.Props<any> & {
-  renderItem: (d: T) => any /** Item */;
+  renderItem: (d: T, idx: number) => any /** Item */;
   data: T[];
   emptyDataMessage: any
 };
@@ -18,14 +18,13 @@ class ItemsView<T> extends React.Component<ItemsViewProps<T>, ItemsViewState> {
         <Item.Group divided>
           {this.props.data.map((d, idx) => (
             <Item key={`item-${idx}`}>
-              <Item.Content>{this.props.renderItem(d)}</Item.Content>
+              <Item.Content>{this.props.renderItem(d, idx)}</Item.Content>
             </Item>
           ))}
         </Item.Group>
       );
     }
     return elem;
-    return undefined;
   }
 }
 

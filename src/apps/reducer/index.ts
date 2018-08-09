@@ -47,8 +47,10 @@ export const reducer: Reducer<State> = (
       };
     }
     case StartAppTrainingAction: {
-      state.onTraining.push((action as StartAppTraining).app);
-      return state;
+      return {
+        ...state,
+        onTraining: state.onTraining.concat((action as StartAppTraining).app)
+      };
     }
     case AppTrainedAction: {
       return {

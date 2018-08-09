@@ -33,7 +33,13 @@ const devConfig = {
 
 const prodConfig = {};
 
-const prodPlugins = [];
+const prodPlugins = [
+  new webpack.DefinePlugin({
+    'process.env': {
+      NLU_TRAINER_API: JSON.stringify(process.env.NLU_TRAINER_API)
+    }
+  })
+];
 
 module.exports = function(env) {
   let otherPlugins = env === "dev" ? devPlugins : prodPlugins;

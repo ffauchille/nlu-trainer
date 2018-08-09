@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect, Dispatch } from "react-redux";
-import { bindActionCreators } from "../../node_modules/redux";
+import { bindActionCreators } from "redux";
 import {
   loadApps,
   LoadApps,
@@ -43,7 +43,7 @@ type AppsProps = AppsOwnProps & {
 };
 type AppsState = {
   createMode: boolean;
-  deleteMode: boolean;
+  deleteMode: string;
 };
 
 class Apps extends React.Component<AppsProps, AppsState> {
@@ -51,7 +51,7 @@ class Apps extends React.Component<AppsProps, AppsState> {
     super(props);
     this.state = {
       createMode: false,
-      deleteMode: false
+      deleteMode: ""
     };
   }
 
@@ -75,7 +75,8 @@ class Apps extends React.Component<AppsProps, AppsState> {
     return this.props.appsOnTraining.findIndex(a => a._id === app._id) > -1;
   }
 
-  renderConfirmDelete(app: AppModel) {
+  renderConfirmDelete(app: AppModel, idx: number) {
+    let modalId: string = `confirm-app-delete-${idx}`
     return (
       <Modal
         size="small"
@@ -84,12 +85,12 @@ class Apps extends React.Component<AppsProps, AppsState> {
           <Button
             basic
             disabled={this.appIsTraining(app)}
-            onClick={(e, d) => this.setState({ deleteMode: true })}
+            onClick={(e, d) => this.setState({ deleteMode: modalId })}
           >
             <Icon name="trash" />Delete
           </Button>
         }
-        open={this.state.deleteMode}
+        open={this.state.deleteMode === modalId}
         closeOnEscape
       >
         <Header icon="archive" content="Are you sure ?" />
@@ -105,7 +106,7 @@ class Apps extends React.Component<AppsProps, AppsState> {
             inverted
             onClick={(e, d) => {
               this.props.deleteApp(app);
-              this.setState({ deleteMode: false });
+              this.setState({ deleteMode: "" });
             }}
           >
             <Icon name="remove" /> Yes, remove {app.name} and all its intents
@@ -113,7 +114,7 @@ class Apps extends React.Component<AppsProps, AppsState> {
           <Button
             color="green"
             inverted
-            onClick={(e, d) => this.setState({ deleteMode: false })}
+            onClick={(e, d) => this.setState({ deleteMode: "" })}
           >
             <Icon name="checkmark" /> No, I want to keep {app.name}
           </Button>
@@ -174,7 +175,7 @@ class Apps extends React.Component<AppsProps, AppsState> {
       <Container fluid>
         {this.renderAppsFormModal()}
         <ItemsView
-          renderItem={(app: AppModel) => (
+          renderItem={(app: AppModel, idx: number) => (
             <Item.Content>
               <Grid>
                 <Grid.Column width="2">
@@ -212,7 +213,7 @@ class Apps extends React.Component<AppsProps, AppsState> {
                     <Button basic disabled color="black">
                       <Icon name="edit" /> Edit
                     </Button>
-                    {this.renderConfirmDelete(app)}
+                    {this.renderConfirmDelete(app, idx)}
                   </Button.Group>
                 </Grid.Column>
               </Grid>

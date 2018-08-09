@@ -1,12 +1,14 @@
-import { ajax, AjaxResponse } from 'rxjs/ajax';
-import { map, catchError } from 'rxjs/operators';
-import { Observable } from '../../../node_modules/rxjs/internal/Observable';
+import { ajax } from 'rxjs/ajax';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs/internal/Observable';
 
-const headers = {
-    "Content-Type": "application/json"
-}
+const headers = { "Content-Type": "application/json" };
 
-const withHost = (route: string) => process.env.NLU_TRAINER_API + (route.startsWith("/") ? route : "/" + route)
+const host = process.env.NLU_TRAINER_API
+
+console.log("host is ", process.env.NLU_TRAINER_API);
+
+const withHost = (route: string) => host + (route.startsWith("/") ? route : "/" + route)
 
 export function get<T>(route: string): Observable<T> { return ajax.getJSON<T>(withHost(route), headers) }
 export function post<B, T>(route: string, body: B): Observable<T> { 
