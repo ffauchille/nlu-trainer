@@ -45,9 +45,7 @@ module.exports = function(env) {
   let otherPlugins = env === "dev" ? devPlugins : prodPlugins;
   let otherConf = env === "dev" ? devConfig : prodConfig;
   return {
-    entry: {
-      app: path.resolve(__dirname)
-    },
+    entry: [ "babel-polyfill", path.resolve(__dirname) ],
     output: {
       path: path.resolve(__dirname, buildDir),
       publicPath: "/",
@@ -60,6 +58,13 @@ module.exports = function(env) {
     devtool: "source-map",
     module: {
       rules: [
+        {
+          test: /\.(js|jsx|mjs)$/,
+          loader: "babel-loader",
+          options: {
+            cacheDirectory: true
+          }
+        },
         {
           test: /\.tsx?$/,
           use: "awesome-typescript-loader"
