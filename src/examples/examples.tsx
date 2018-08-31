@@ -1,6 +1,7 @@
 import * as React from "react";
-import { connect, Dispatch } from "react-redux";
-import { Grid, Container, Button, Icon, Modal, Header } from "semantic-ui-react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import { Grid, Container, Button, Icon, Modal } from "semantic-ui-react";
 import ItemsView from "../items";
 import { Example } from "../models/example";
 import { bindActionCreators, Action } from "redux";
@@ -8,20 +9,24 @@ import { loadIntentExample, LoadIntentExample, deleteExample, DeleteExample } fr
 import { StoreState } from "../reducers";
 import { Intent } from "../models/intent";
 import ExamplesForm from "./examplesform";
-import { LocationDescriptor, LocationState } from "history";
+import { Path } from "history";
 import { push } from "connected-react-router";
 
 type ExamplesOwnProps = React.Props<any> & {};
-type ExamplesProps = ExamplesOwnProps & {
+type ExamplesStateProps = {
   examples: Example[];
-  intent: Intent;
+  intent?: Intent;
+}
+type ExamplesDispatchProps = {
   deleteExample: (e:Example) => DeleteExample;
   loadExamples: (intent: Intent | string) => LoadIntentExample;
   pushRoute: (
-    location: LocationDescriptor,
-    state?: LocationState
+    location: Path
   ) => Action;
-};
+}
+
+type ExamplesProps = ExamplesOwnProps & ExamplesStateProps & ExamplesDispatchProps
+
 type ExamplesState = {
   createMode: boolean;
 };
@@ -34,6 +39,8 @@ class Examples extends React.Component<ExamplesProps, ExamplesState> {
       createMode: false
     }
   }
+
+  get intent() { return this.props.intent || new Intent({}) }
 
   componentWillMount() {
     if (!this.props.intent) {
@@ -61,11 +68,11 @@ class Examples extends React.Component<ExamplesProps, ExamplesState> {
     closeOnEscape={false}
     closeOnTriggerBlur
   >
-    <Modal.Header>New Example for {this.props.intent? this.props.intent.name : ""}</Modal.Header>
+    <Modal.Header>New Example for {this.intent.name}</Modal.Header>
     <Modal.Content>
       <ExamplesForm
         onCreateSubmit={example => this.setState({ createMode: false })}
-        beforeCreate={ pl => ({ ...pl, intentId: this.props.intent._id, intentName: this.props.intent.name })}
+        beforeCreate={ pl => ({ ...pl, intentId: this.intent._id, intentName: this.intent.name })}
       />
     </Modal.Content>
   </Modal>
@@ -112,7 +119,7 @@ const mapDispatcherToProps = (dispatch: Dispatch) => ({
   pushRoute: bindActionCreators(push, dispatch)
 });
 
-export default connect(
+export default connect<ExamplesStateProps, ExamplesDispatchProps, ExamplesOwnProps, StoreState>(
   mapStateToProps,
   mapDispatcherToProps
 )(Examples);

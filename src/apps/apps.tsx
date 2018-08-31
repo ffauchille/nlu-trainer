@@ -1,33 +1,12 @@
 import * as React from "react";
-import { connect, Dispatch } from "react-redux";
-import { bindActionCreators } from "redux";
-import {
-  loadApps,
-  LoadApps,
-  appSelected,
-  AppSelected,
-  StartAppTraining,
-  startAppTraining,
-  DeleteApp,
-  deleteApp
-} from "./actions";
-import {
-  TestApp,
-  testApp
-} from "../testbox/actions";
-import { AppModel, AppModelType, AppStatus } from "../models/app";
-import {
-  Grid,
-  Container,
-  Header,
-  Button,
-  Item,
-  Icon,
-  Image,
-  Modal
-} from "semantic-ui-react";
-import { StoreState } from "../reducers";
+import { connect } from "react-redux";
+import { bindActionCreators, Dispatch } from "redux";
+import { Button, Container, Grid, Header, Icon, Image, Item, Modal } from "semantic-ui-react";
 import ItemsView from "../items";
+import { AppModel, AppModelType } from "../models/app";
+import { StoreState } from "../reducers";
+import { TestApp, testApp } from "../testbox/actions";
+import { appSelected, AppSelected, DeleteApp, deleteApp, loadApps, LoadApps, StartAppTraining, startAppTraining } from "./actions";
 import AppsForm from "./appsform";
 import Status from "./appstatus";
 

@@ -1,28 +1,14 @@
-import * as React from "react";
-import { connect, Dispatch } from "react-redux";
-import {
-  Grid,
-  Container,
-  Header,
-  Button,
-  Icon,
-  Modal
-} from "semantic-ui-react";
-import { AppModel } from "../models/app";
-import { bindActionCreators, Action } from "redux";
-import {
-  loadAppIntents,
-  LoadAppIntents,
-  IntentSelected,
-  intentSelected,
-  DeleteIntent,
-  deleteIntent
-} from "./actions";
-import { Intent } from "../models/intent";
-import ItemView from "../items";
-import IntentsForm from "./intentsform";
-import { LocationDescriptor, LocationState } from "history";
 import { push } from "connected-react-router";
+import { Path } from "history";
+import * as React from "react";
+import { connect } from "react-redux";
+import { Action, bindActionCreators, Dispatch } from "redux";
+import { Button, Container, Grid, Header, Icon, Modal } from "semantic-ui-react";
+import ItemView from "../items";
+import { AppModel } from "../models/app";
+import { Intent } from "../models/intent";
+import { DeleteIntent, deleteIntent, IntentSelected, intentSelected, loadAppIntents, LoadAppIntents } from "./actions";
+import IntentsForm from "./intentsform";
 
 type IntentsOwnProps = React.Props<any> & {};
 type IntentsProps = IntentsOwnProps & {
@@ -31,7 +17,7 @@ type IntentsProps = IntentsOwnProps & {
   loadAppIntents: (app: AppModel | string) => LoadAppIntents;
   deleteIntent: (i: Intent) => DeleteIntent;
   intentSelected: (intent: Intent) => IntentSelected;
-  pushRoute: (location: LocationDescriptor, state?: LocationState) => Action;
+  pushRoute: (location: Path) => Action;
 };
 
 type IntentsState = {

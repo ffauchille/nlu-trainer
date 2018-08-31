@@ -1,12 +1,12 @@
 
 import * as React from "react";
-import { connect, Dispatch } from "react-redux";
+import { connect } from "react-redux";
+import { bindActionCreators, Action, Dispatch } from "redux";
 import { Breadcrumb } from "semantic-ui-react";
 import { AppModel } from "../models/app";
 import { Intent } from "../models/intent";
-import { bindActionCreators, Action } from "redux";
 import { push } from "connected-react-router";
-import { LocationState, LocationDescriptor } from "history";
+import { Path } from "history";
 import { StoreState } from "../reducers";
 import { UnselectApp, unselectApp } from "../apps/actions";
 import { UnselectIntent, unselectIntent } from "../intents/actions";
@@ -14,19 +14,22 @@ import { urlify } from "../utils";
 
 type NavigationOwnProps = React.Props<any> & {};
 
-type NavigationProps = NavigationOwnProps & {
-  appSelected?: AppModel;
-  intentSelected?: Intent;
-  testingApp?: AppModel;
-
+type NavigationActionDispatch = {
   pushRoute: (
-    location: LocationDescriptor,
-    state?: LocationState
+    location: Path
   ) => Action;
 
   unselectApp: () => UnselectApp;
   unselectIntent: () => UnselectIntent;
-};
+}
+type NavigationStore = {
+  appSelected?: AppModel;
+  intentSelected?: Intent;
+  testingApp?: AppModel;
+}
+
+type NavigationProps = NavigationOwnProps & NavigationActionDispatch & NavigationStore
+
 type NavigationState = {};
 
 const divider = (cpt: number) => <Breadcrumb.Divider key={`divider ${cpt}`}>/</Breadcrumb.Divider>;
@@ -104,7 +107,7 @@ const mapDispatcherToProps = (dispatch: Dispatch) => ({
   unselectIntent: bindActionCreators(unselectIntent, dispatch)
 });
 
-export default connect(
+export default connect<NavigationStore, NavigationActionDispatch, NavigationOwnProps, StoreState>(
   mapStateToProps,
   mapDispatcherToProps
 )(Navigation);

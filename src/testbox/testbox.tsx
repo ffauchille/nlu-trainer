@@ -1,19 +1,19 @@
-import * as React from "react";
-import { bindActionCreators, Action } from "redux";
-import { connect } from "react-redux";
-import { Container, Menu, Header, Radio, Label, Grid } from "semantic-ui-react";
-import LivePane from "./livepane";
-import BatchPane from "./batchpane";
-import { StoreState } from "../reducers";
-import { AppModel } from "../models/app";
 import { push } from "connected-react-router";
-import { LocationState, LocationDescriptor } from "history";
+import { Path } from "history";
+import * as React from "react";
+import { connect } from "react-redux";
+import { Action, bindActionCreators } from "redux";
+import { Grid, Label, Radio } from "semantic-ui-react";
+import { AppModel } from "../models/app";
+import { StoreState } from "../reducers";
+import BatchPane from "./batchpane";
+import LivePane from "./livepane";
 
 type TestBoxOwnProps = React.Props<any> & {};
 type TestBoxProps = TestBoxOwnProps & {
   app?: AppModel;
 
-  pushRoute: (location: LocationDescriptor, state?: LocationState) => Action;
+  pushRoute: (location: Path) => Action;
 };
 
 type TestBoxState = {
