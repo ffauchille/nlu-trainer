@@ -12,6 +12,7 @@ logs
 *.log
 npm-debug.log*
 # semantic dist build
+semantic
 !semantic/dist/**/*
 
 # Runtime data
@@ -90,3 +91,5 @@ yarn.lock
 
 # .env to avoid pushing passwords & secret variables
 .env
+
+build_with_args.sh
