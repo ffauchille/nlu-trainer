@@ -1,5 +1,5 @@
 {
-  "name": "nlu-trainner",
+  "name": "nlu-trainer-app",
   "version": "1.0.0",
   "description": "NLU trainner UI",
   "main": "index.js",
