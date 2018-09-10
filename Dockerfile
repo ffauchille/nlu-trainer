@@ -3,7 +3,7 @@ FROM node:8 as build
 COPY . /app
 WORKDIR /app
 
-ARG NLU_TRAINER_API=http://nlu-trainer-api:8001
+ARG NLU_TRAINER_API=http://localhost:8001
 ENV NLU_TRAINER_API ${NLU_TRAINER_API}
 
 RUN npm install && npm run build:dist
