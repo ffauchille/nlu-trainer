@@ -1,0 +1,46 @@
+{
+  "name": "nlu-trainer-api",
+  "version": "1.0.0",
+  "description": "NLU trainer api for nlu trainer app",
+  "main": "app.js",
+  "scripts": {
+    "clean": "touch built/ && rm -rf built/",
+    "clean-yml": "rm data/*.yml",
+    "build": "npm run clean && tsc",
+    "build:dist": "tsc",
+    "start": "npm run build && node built/server.js",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ffauchille/nlu-trainer-api.git"
+  },
+  "keywords": [
+    "nlu",
+    "trainer",
+    "api"
+  ],
+  "author": "florent fauchille <florentfauchille@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ffauchille/nlu-trainer-api/issues"
+  },
+  "homepage": "https://github.com/ffauchille/nlu-trainer-api#readme",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "jsonschema": "^1.2.4",
+    "mongodb": "^3.1.1",
+    "request": "^2.87.0",
+    "restify": "^7.2.1",
+    "restify-cors-middleware": "^1.1.1",
+    "rxjs": "^6.2.2"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^3.1.2",
+    "@types/request": "^2.47.1",
+    "@types/restify": "^7.2.3",
+    "@types/restify-cors-middleware": "^1.0.1",
+    "tslint": "^5.11.0",
+    "typescript": "^2.9.2"
+  }
+}
