@@ -11,7 +11,13 @@ import {
   IntentSelected,
   DeleteIntentAction,
   DeleteIntent,
-  intentDeleted
+  intentDeleted,
+  CreateEntityAction,
+  CreateEntity,
+  LoadAppEntitiesAction,
+  LoadAppEntities,
+  appEntitiesLoaded,
+  loadAppEntities
 } from "../actions";
 import { flatMap, map } from "rxjs/operators";
 import * as api from "../../apis";
@@ -24,6 +30,15 @@ const loadAppIntentsEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
     .ofType(LoadAppIntentsAction)
     .pipe(flatMap(a => api.getAppIntents((a as LoadAppIntents).app)))
     .pipe(map(intents => appIntentsLoaded(intents)));
+
+ 
+const loadAppEntitiesEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
+  action$
+    .ofType(LoadAppEntitiesAction)
+    .pipe(flatMap(a => api.getAppEntities((a as LoadAppEntities).app)))
+    .pipe(map(entities => appEntitiesLoaded(entities)));
+
+ 
 
 const intentSelectedEpic: Epic<Actions, Actions, StoreState, {}> = (
   action$,
@@ -61,9 +76,19 @@ const deleteIntentEpic: Epic<Actions, any> = action$ =>
       )
     );
 
+const createEntityEpic = action$ =>
+    action$
+       .ofType(CreateEntityAction)
+       .pipe(
+         flatMap((a: CreateEntity) => api.createEntity(a.entity)),
+         map<any, any>(created => loadAppEntities(created.appId))
+       )
+
 export default [
   loadAppIntentsEpic,
+  loadAppEntitiesEpic,
   createIntentEpic,
+  createEntityEpic,
   intentSelectedEpic,
   deleteIntentEpic
 ];

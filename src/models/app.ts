@@ -14,10 +14,16 @@ const appModelSchema = {
 
 export type AppModelType = "RASA"
 
-export interface AppModel {
+export class AppModel {
     _id: string;
     name: string;
     type: AppModelType;
+    
+    constructor(props: Partial<AppModel>) {
+        this._id = props._id || ""
+        this.name = props.name || ""
+        this.type = props.type || "RASA"
+    }
 }
 
 export type AppStatus = {

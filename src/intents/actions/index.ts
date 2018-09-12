@@ -1,7 +1,7 @@
 import { Action } from "redux";
 import { AppModel } from "../../models/app";
 import { Intent } from "../../models/intent";
-
+import { Entity } from "../../models/entity";
 
 export type LoadAppIntents = Action<string> & {
     app: AppModel | string
@@ -17,6 +17,12 @@ export type AppIntentsLoaded = Action<string> & {
 export const AppIntentsLoadedAction = "intents#AppIntentsLoaded"
 export function appIntentsLoaded(intents: Intent[]): AppIntentsLoaded {
     return { type: AppIntentsLoadedAction, intents }
+}
+
+export type AppEntitiesLoaded = Action<string> & { entities: Entity[] }
+export const AppEntitiesLoadedAction = "intents#AppEntitiesLoaded"
+export function appEntitiesLoaded( entities: Entity[] ): AppEntitiesLoaded {
+    return { type: AppEntitiesLoadedAction, entities }
 }
 
 export type UnselectIntent = Action<string> & {}
@@ -55,18 +61,68 @@ export function deleteIntent(intent: Intent): DeleteIntent {
     return { type: DeleteIntentAction, intent }
 }
 
-export type intentDeleted = Action<string> & { intent: Intent }
+export type IntentDeleted = Action<string> & { intent: Intent }
 export const IntentDeletedAction = "intents#IntentDeleted"
-export function intentDeleted( intent: Intent ): intentDeleted {
+export function intentDeleted( intent: Intent ): IntentDeleted {
     return { type: IntentDeletedAction, intent }
+}
+
+export type DeleteEntity = Action<string> & { entity: Entity }
+export const DeleteEntityAction = "intents#DeleteEntity"
+export function deleteEntity(entity: Entity): DeleteEntity {
+    return { type: DeleteEntityAction, entity }
+}
+
+export type EntityDeleted = Action<string> & { entity: Entity }
+export const EntityDeletedAction = "intents#EntityDeleted"
+export function entityDeleted(entity: Entity): EntityDeleted {
+    return { type: EntityDeletedAction, entity }
+}
+
+export type CreateEntity = Action<string> & { entity: Partial<Entity> }
+export const CreateEntityAction = "intents#CreateEntity"
+export function createEntity(entity: Partial<Entity>): CreateEntity {
+    return { type: CreateEntityAction, entity }
+}
+
+export type EntityCreated = Action<string> & {}
+export const EntityCreatedAction = "intents#EntityCreated"
+export function EntityCreated(): EntityCreated {
+    return { type: EntityCreatedAction }
+}
+
+export type UpdateEntity = Action<string> & { entity: Entity }
+export const UpdateEntityAction = "intents#UpdateEntity"
+export function updateEntity(entity: Entity): UpdateEntity {
+    return { type: UpdateEntityAction, entity }
+}
+
+export type EntityUpdated = Action<string> & {}
+export const EntityUpdatedAction = "intents#EntityUpdated"
+export function entityUpdated(): EntityUpdated {
+    return { type: EntityUpdatedAction }
+}
+
+export type LoadAppEntities = Action<string> & { app: AppModel | string }
+export const LoadAppEntitiesAction = "intents#LoadAppEntities"
+export function loadAppEntities( app: AppModel | string ): LoadAppEntities {
+    return { type: LoadAppEntitiesAction, app }
 }
 
 export type Actions =
     | LoadAppIntents 
+    | LoadAppEntities
     | AppIntentsLoaded
+    | AppEntitiesLoaded
     | UnselectIntent
     | CreateIntent
     | UpdateIntent
     | IntentSelected
     | DeleteIntent
-    | intentDeleted
+    | DeleteEntity
+    | IntentDeleted
+    | EntityDeleted
+    | CreateEntity
+    | EntityCreated
+    | UpdateEntity
+    | EntityUpdated

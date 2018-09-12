@@ -1,11 +1,11 @@
 import { Example } from "./example";
-import { NLUEntitySynonym } from "./entity";
+import { Entity } from "./entity";
 
 export class NLUModel {
  
     common_examples: Example[]
     regex_features : NLURegexFeature[]
-    entity_synonyms: NLUEntitySynonym[]
+    entity_synonyms: Entity[]
  
     constructor(props: Partial<NLUModel>) {
         this.common_examples = props.common_examples || []

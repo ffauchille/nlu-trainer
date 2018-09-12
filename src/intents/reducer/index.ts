@@ -1,15 +1,18 @@
 import { Reducer } from "redux";
-import { AppIntentsLoadedAction, AppIntentsLoaded, UnselectIntentAction, IntentSelectedAction, IntentSelected, intentDeleted, IntentDeletedAction } from "../actions";
+import { AppIntentsLoadedAction, AppIntentsLoaded, UnselectIntentAction, IntentSelectedAction, IntentSelected, IntentDeleted, IntentDeletedAction, AppEntitiesLoadedAction, AppEntitiesLoaded } from "../actions";
 import { Intent } from "../../models/intent";
 import { removeAtIndex } from "../../utils";
+import { Entity } from "../../models/entity";
 
 type State = {
   all: Intent[],
+  entities: Entity[],
   selected?: Intent
 };
 
 export const defaultState = (): State => ({
-  all: []
+  all: [],
+  entities: []
 });
 
 export const reducer: Reducer<State> = (
@@ -22,6 +25,12 @@ export const reducer: Reducer<State> = (
         ...state,
         all: (action as AppIntentsLoaded).intents
       };
+    }
+    case AppEntitiesLoadedAction: {
+      return {
+        ...state,
+        entities: (action as AppEntitiesLoaded).entities
+      }
     }
     case IntentSelectedAction: {
       return {
@@ -38,7 +47,7 @@ export const reducer: Reducer<State> = (
     case IntentDeletedAction: {
       return {
         ...state,
-        all: removeAtIndex(state.all, i => i._id === (action as intentDeleted).intent._id)
+        all: removeAtIndex(state.all, i => i._id === (action as IntentDeleted).intent._id)
       }
     }
     default: {
