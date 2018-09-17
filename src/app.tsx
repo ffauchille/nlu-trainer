@@ -20,6 +20,7 @@ import { startPolling } from "./utils";
 import { map } from "rxjs/operators";
 import { Subscription } from "rxjs";
 import { rasaStatusUpdated } from "./apps/actions/rasa";
+import BatchPane from "./testbox/batchpane";
 
 const epicMiddleware = createEpicMiddleware();
 const history: History = createBrowserHistory();
@@ -49,6 +50,7 @@ export class App extends React.Component<any, {}> {
         <Layout>
           <ConnectedRouter history={history}>
             <Switch>
+              <Route path="/testbox/:appId/:batchId" component={BatchPane}/>
               <Route path="/testbox/:appId" component={TestBox}/>
               <Route path="/:appId/:intentName" component={Examples} />
               <Route path="/:appId" component={Intents} />

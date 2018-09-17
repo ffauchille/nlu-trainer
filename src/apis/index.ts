@@ -6,6 +6,7 @@ import { Intent } from "../models/intent";
 import { Example } from "../models/example";
 import { normalize } from "../utils";
 import { Entity } from "../models/entity";
+import { TestSuite } from "../models/testsuite";
 
 
 export const getApps = (): Observable<AppModel[]> => get("/apps").pipe(map(r => (r as AppModel[]).map(e => new AppModel(e))))
@@ -32,6 +33,8 @@ export const createApp = (appCreate: Partial<AppModel>): Observable<any> => post
 export const createIntent = (intentCreate: Partial<Intent>): Observable<any> => post("/intents", intentCreate)
 export const createExample = (exampleCreate: Partial<Example>): Observable<any> => post("/examples", exampleCreate)
 export const createEntity = (entityCreate: Partial<Entity>): Observable<Entity> => post("/entities", entityCreate).pipe(map(r => new Entity(r)))
+export const createTestSuite = (testSuiteCreate: Partial<TestSuite>): Observable<TestSuite> => post("/testsuites", testSuiteCreate).pipe(map(r => new TestSuite(r)))
+
 
 export const trainApp = (app: AppModel): Observable<any> => {
     var obs = of(app)

@@ -3,7 +3,7 @@ import { Path } from "history";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Action, bindActionCreators } from "redux";
-import { Grid, Label, Radio } from "semantic-ui-react";
+import { Grid, Label, Radio, Menu } from "semantic-ui-react";
 import { AppModel } from "../models/app";
 import { StoreState } from "../reducers";
 import BatchPane from "./batchpane";
@@ -49,36 +49,22 @@ class TestBox extends React.Component<TestBoxProps, TestBoxState> {
     return elem;
   }
 
-  radioColor(item: string) {
-    return this.state.active === item ? "violet" : "black";
-  }
-
   render() {
     return (
       <Grid>
         <Grid.Row>
-          <Grid.Column width="7" textAlign="right">
-            <Label as="a" basic color={this.radioColor("Live")} onClick={(e,d) => this.setState({ active: 'Live' })}>
-              Live
-            </Label>
-          </Grid.Column>
-          <Grid.Column width="2" textAlign="center">
-            <Radio
-              disabled
-              onClick={(e, d) =>
-                this.setState({
-                  active: this.state.active === "Live" ? "Batch" : "Live"
-                })
-              }
-              slider
-              checked={this.state.active === "Batch"}
-            />
-          </Grid.Column>
-          <Grid.Column width="7" textAlign="left">
-            <Label as="a" basic color={this.radioColor("Batch")} onClick={(e,d) => console.error("not implemented yet") /** this.setState({ active: 'Batch' }) */}>
-              Batch
-            </Label>
-          </Grid.Column>
+        <Menu pointing secondary color="violet">
+          <Menu.Item
+            name="Live"
+            active={this.state.active === "Live"}
+            onClick={(e, d) => this.setState({ active: "Live" })}
+          />
+          <Menu.Item
+            name="Batch"
+            active={this.state.active === "Batch"}
+            onClick={(e, d) => this.setState({ active: "Batch" })}
+          />
+        </Menu>
         </Grid.Row>
         <Grid.Row>{this.renderContent()}</Grid.Row>
       </Grid>

@@ -1,6 +1,7 @@
 import { Action } from "redux";
 import { AppModel } from "../../models/app";
 import { PredictionResult } from "../reducer"
+import { TestSuite } from "../../models/testsuite";
 
 export type TestApp = Action<string> & { app: AppModel }
 export const TestAppAction = "testbox#TestApp"
@@ -20,7 +21,21 @@ export function prediction(app: AppModel, prediction: PredictionResult): Predict
     return { type: PredictionAction, app, prediction }
 }
 
+export type CreateTestSuite = Action<string> & { creation: Partial<TestSuite> }
+export const CreateTestSuiteAction = "testbox#CreateTestSuite"
+export function createTestSuite(creation: Partial<TestSuite>): CreateTestSuite {
+    return { type: CreateTestSuiteAction, creation }
+}
+
+export type TestSuiteCreated = Action<string> & { testSuite: TestSuite }
+export const TestSuiteCreatedAction = "testbox#TestSuiteCreated"
+export function testSuiteCreated( testSuite: TestSuite): TestSuiteCreated {
+    return { type: TestSuiteCreatedAction, testSuite }
+}
+
 export type Actions =
     | TestApp
     | Predict
     | Prediction
+    | CreateTestSuite
+    | TestSuiteCreated
