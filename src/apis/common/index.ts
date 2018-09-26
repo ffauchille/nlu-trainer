@@ -4,8 +4,6 @@ import { Observable } from 'rxjs/internal/Observable';
 
 const headers = { "Content-Type": "application/json" };
 
-console.log("host is ", process.env.NLU_TRAINER_API);
-
 const withHost = (route: string) => process.env.NLU_TRAINER_API + (route.startsWith("/") ? route : "/" + route)
 
 export function get<T>(route: string): Observable<T> { return ajax.getJSON<T>(withHost(route), headers) }
@@ -16,4 +14,12 @@ export function post<B, T>(route: string, body: B): Observable<T> {
 
 export function del<B, T>(route: string): Observable<T> {
     return ajax.delete(withHost(route), headers).pipe(map(r => r.response as T))
+}
+
+export function postFile<T>(route: string, data: FormData): Observable<T> {
+    return ajax({
+        url: withHost(route),
+        body: data,
+        method: 'POST'
+    }).pipe(map(r => r.response as T))
 }

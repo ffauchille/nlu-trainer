@@ -18,9 +18,9 @@ class BatchPane extends React.Component<BatchPaneProps, BatchPaneState> {
   render() {
     return (
       <React.Fragment>
-          <Button basic onClick={(e,d) => this.onCreateTestSuite()}>
+          <Button.Group basic onClick={(e,d) => this.onCreateTestSuite()}>
             <Icon name="add" /> New Test Suite
-          </Button>
+          </Button.Group>
           <ItemsView
             renderItem={suite => <Header>TODO</Header>}
             data={[]}

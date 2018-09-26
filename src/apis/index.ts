@@ -1,4 +1,4 @@
-import { get, post, del } from "./common";
+import { get, post, del, postFile } from "./common";
 import { map } from "rxjs/operators";
 import { AppModel } from "../models/app";
 import { Observable, of } from "rxjs";
@@ -61,3 +61,5 @@ export const deleteExample = (ex: Example) => del("/examples?example=" + ex._id)
 export const deleteApp = (app: AppModel) => del("/apps?app=" + app._id)
 
 export const getStatus = get("/status")
+
+export const uploadCSVFile = (data: FormData) => postFile("/testsuites/csv", data)

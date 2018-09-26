@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 import { AppModel } from '../../models/app';
-import { TestAppAction, TestApp, PredictionAction, Prediction, PredictAction, Predict } from '../actions';
+import { TestAppAction, TestApp, PredictionAction, Prediction, PredictAction, Predict, UploadCSVAction, CSVUploadedAction } from '../actions';
 import { UnselectAppAction } from '../../apps/actions';
 
 type IntentScore = {
@@ -25,14 +25,23 @@ type LiveState = {
     messageLog: ChatMessage[];
     predicting: boolean;
 }
+
+type BatchState = {
+    uploadingCSV: boolean
+}
+
 type State = {
     app?: AppModel;
     live: LiveState;
+    batch: BatchState;
 }
 const defaultState: State = {
     live: {
         messageLog: [],
         predicting: false
+    },
+    batch: {
+        uploadingCSV: false
     }
 };
 
@@ -80,6 +89,24 @@ export const reducer: Reducer<State> = (
                 ...state.live,
                 messageLog: [ ...state.live.messageLog, predictionMessage],
                 predicting: false
+            }
+        }
+    }
+    case UploadCSVAction: {
+        return {
+            ...state,
+            batch: {
+                ...state.batch,
+                uploadingCSV: true
+            }
+        }
+    }
+    case CSVUploadedAction: {
+        return {
+            ...state,
+            batch: {
+                ...state.batch,
+                uploadingCSV: false
             }
         }
     }

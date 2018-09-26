@@ -33,9 +33,23 @@ export function testSuiteCreated( testSuite: TestSuite): TestSuiteCreated {
     return { type: TestSuiteCreatedAction, testSuite }
 }
 
+export type UploadCSV = Action<string> & { data: FormData }
+export const UploadCSVAction = "testbox#UploadCSV"
+export function uploadCSV(data: FormData): UploadCSV {
+    return { type: UploadCSVAction, data }
+}
+
+export type CSVUploaded = Action<string> & {}
+export const CSVUploadedAction = "testbox#CSVUploaded"
+export function csvUploaded(): CSVUploaded {
+    return { type: CSVUploadedAction }
+}
+
 export type Actions =
     | TestApp
     | Predict
     | Prediction
     | CreateTestSuite
     | TestSuiteCreated
+    | UploadCSV
+    | CSVUploaded
