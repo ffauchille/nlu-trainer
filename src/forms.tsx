@@ -7,10 +7,11 @@ import {
   Input,
   Message,
   DropdownProps,
-  Dropdown
+  Dropdown,
+  Radio
 } from "semantic-ui-react";
 
-import { removeAtIndex } from "./utils";
+import { removeAtIndex, findIndex } from "./utils";
 import { DatePickerOwnProps } from "./date";
 
 const renderError = props => {
@@ -59,6 +60,31 @@ class DateWrap extends React.Component<DatePickerOwnProps> {
   }
 }
 
+class RadioWrap extends React.Component<any, { checked: boolean }> {
+
+  constructor(props: any) {
+    super(props);
+    props.input.value = !!props.checked
+    this.state = {
+      checked: !!props.checked
+    }
+  }
+
+  onRadioChange() {
+    this.setState({ checked: !this.state.checked })
+    this.props.input.value = this.state.checked;
+  }
+
+  render() {
+    return (
+    <div>
+      <Radio label={this.props.label} defaultChecked={this.props.checked} onChange={(e,d) => this.setState({ checked: !this.state.checked })}></Radio>
+      {renderError(this.props)}
+    </div>
+    )
+  }
+}
+
 type SelectWrapProps = {
   options: DropdownItemProps[];
   input: any; // meta from redux-form.Field
@@ -84,7 +110,8 @@ class SelectWrap extends React.Component<SelectWrapProps, SelectWrapState> {
     event: React.SyntheticEvent<HTMLElement>,
     data: DropdownProps
   ): void {
-    let found = this.props.options.find(opt => opt.value === data.value);
+    let idx = findIndex(this.props.options, opt => opt.value === data.value);
+    let found = idx > -1 ? this.props.options[idx] : null;
     this.setState({
       valueSelected: data.value as string,
       textSelected: found ? (found.text as string) : (data.value as string)
@@ -179,6 +206,8 @@ type FormFieldWrapProps = {
   inputExtraCss?: string;
   /** grouped of input, they are wrapped in a row flex displayed div */
   grouped?: FormFieldWrapProps[];
+  /** for check component; if it's checked by default */
+  checked?: boolean;
 };
 
 const computeFieldKey = (formField: FormFieldWrapProps) =>
@@ -250,6 +279,12 @@ const renderField = (formField: FormFieldWrapProps, key?: string) => {
           {(formField.grouped || []).map(ff => renderField(ff))}
         </Form.Group>
       );
+    case "check":
+        return(
+          <Form.Field key={fieldKey}>
+            <Field {...commonFieldProps} component={RadioWrap} label={formField.placeholder} defaultChecked={formField.checked}></Field>
+          </Form.Field>
+        )
     default:
       return <span>Not a valid component key for a form field</span>;
   }

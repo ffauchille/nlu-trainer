@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import { StoreState } from '../reducers';
 import { AppModel, AppStatus as Status } from '../models/app';
 import { Icon } from 'semantic-ui-react';
+import { findIndex } from '../utils';
 
 type AppStatusOwnProps = React.Props<any> & {
     app: AppModel;
@@ -17,7 +18,8 @@ type AppStatusState = {}
 class AppStatus extends React.Component<AppStatusProps, AppStatusState> {
     render() {
         var elem = <React.Fragment><Icon name="question" color="black" /> Unknown</React.Fragment>
-        let found = this.props.appsStatus.find(a => a.app._id === this.props.app._id)
+        let idx = findIndex(this.props.appsStatus, a => a.app._id === this.props.app._id)
+        let found = idx > -1 ? this.props.appsStatus[idx] : null;
         if (found) {
           switch(found.status) {
             case "ready":

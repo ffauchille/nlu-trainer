@@ -9,6 +9,7 @@ import { TestApp, testApp } from "../testbox/actions";
 import { appSelected, AppSelected, DeleteApp, deleteApp, loadApps, LoadApps, StartAppTraining, startAppTraining } from "./actions";
 import AppsForm from "./appsform";
 import Status from "./appstatus";
+import { findIndex } from "../utils";
 
 type AppsOwnProps = React.Props<any> & {};
 type AppsProps = AppsOwnProps & {
@@ -51,7 +52,7 @@ class Apps extends React.Component<AppsProps, AppsState> {
   }
 
   appIsTraining(app: AppModel): boolean {
-    return this.props.appsOnTraining.findIndex(a => a._id === app._id) > -1;
+    return findIndex(this.props.appsOnTraining, a => a._id === app._id) > -1;
   }
 
   renderConfirmDelete(app: AppModel, idx: number) {
