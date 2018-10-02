@@ -26,7 +26,7 @@ type BatchDetailState = {};
 class BatchDetail extends React.Component<BatchDetailProps, BatchDetailState> {
   renderEvaluationRow(prediction: Prediction, k: string) {
     return (
-      <Table.Row key={k}>
+      <Table.Row key={k} error={prediction.intent !== prediction.predicted}>
         <Table.Cell>{prediction.text}</Table.Cell>
         <Table.Cell>{prediction.intent}</Table.Cell>
         <Table.Cell>{prediction.predicted}</Table.Cell>
