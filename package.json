@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "start": "npm run clean && npm run build && webpack-dev-server --env=dev --color",
+    "start": "NODE_MODE=dev && npm run clean && npm run build && webpack-dev-server --env=dev --color",
     "build": "tsc",
     "build:dist": "webpack --env=prod --progress",
     "clean": "rm -rf built/"

@@ -1,23 +1,23 @@
 import { Example } from "./example";
 
 export class ModelEvaluation {
-  intent_evaluation: IntentEvaluation;
+  intent_evaluation: TestSuiteEvaluation;
 
   constructor(props: Partial<ModelEvaluation>) {
-    this.intent_evaluation = new IntentEvaluation(
+    this.intent_evaluation = new TestSuiteEvaluation(
       props.intent_evaluation || {}
     );
   }
 }
 
-class IntentEvaluation {
+export class TestSuiteEvaluation {
   report: string;
   predictions: Prediction[];
   precision: number;
   f1_score: number;
   accuracy: number;
 
-  constructor(props: Partial<IntentEvaluation>) {
+  constructor(props: Partial<TestSuiteEvaluation>) {
     this.report = props.report || "";
     this.predictions = (props.predictions || []).map(
       prediction => new Prediction(prediction)
@@ -28,7 +28,7 @@ class IntentEvaluation {
   }
 }
 
-class Prediction {
+export class Prediction {
   text: string;
   intent: string;
   predicted: string;
@@ -42,13 +42,34 @@ class Prediction {
   }
 }
 
+export class TestSuiteCreation {
+  appId: string;
+  name: string;
+
+  constructor(props: Partial<TestSuiteCreation>) {
+    this.appId = props.appId || "";
+    this.name = props.name || new Date().toISOString();
+  }
+}
+
+export class TestExample {
+  text: string
+  intent: string
+  entities: string[]
+
+  constructor(props: Partial<TestExample>) {
+    this.text = props.text || ""
+    this.intent = props.intent || ""
+    this.entities = props.entities || []
+  }
+}
+
 export class TestSuite {
   _id: string;
   name: string;
   appId: string;
   lastRunAt: number;
-  testExamples: Example[];
-  fromTraining: boolean;
+  testExamples: TestExample[];
 
   constructor(props: Partial<TestSuite>) {
     this._id = props._id || "";
@@ -56,8 +77,7 @@ export class TestSuite {
     this.appId = props.appId || "";
     this.lastRunAt = props.lastRunAt || 0;
     this.testExamples = (props.testExamples || []).map(
-      line => new Example(line)
+      line => new TestExample(line)
     );
-    this.fromTraining = props.fromTraining || false;
   }
 }

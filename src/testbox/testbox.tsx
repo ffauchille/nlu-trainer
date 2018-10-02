@@ -41,7 +41,7 @@ class TestBox extends React.Component<TestBoxProps, TestBoxState> {
   renderContent() {
     var elem = <span />;
     if (this.state.active === "Batch") {
-      elem = <BatchPane />;
+      elem = <BatchPane app={this.app}/>;
     }
     if (this.state.active === "Live") {
       elem = <LivePane app={this.app}/>;

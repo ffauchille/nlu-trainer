@@ -1,7 +1,8 @@
 import { Reducer } from 'redux';
 import { AppModel } from '../../models/app';
-import { TestAppAction, TestApp, PredictionAction, Prediction, PredictAction, Predict, UploadCSVAction, CSVUploadedAction } from '../actions';
+import { TestAppAction, TestApp, PredictionAction, Prediction, PredictAction, Predict, UploadCSVAction, CSVUploadedAction, LoadTestSuitesAction, TestSuitesLoadedAction, TestSuitesLoaded, SelectSuiteForEvaluationAction, SelectSuiteForEvaluation, CloseTestSuiteEvaluationAction, TestSuiteEvaluatedAction, TestSuiteEvaluated, StartTestSuiteEvaluationAction } from '../actions';
 import { UnselectAppAction } from '../../apps/actions';
+import { TestSuite, TestSuiteEvaluation } from '../../models/testsuite';
 
 type IntentScore = {
     name: string;
@@ -27,7 +28,11 @@ type LiveState = {
 }
 
 type BatchState = {
-    uploadingCSV: boolean
+    uploadingCSV: boolean,
+    suites: TestSuite[],
+    processingEvaluation: boolean,
+    suiteSelected?: TestSuite
+    evaluation?: TestSuiteEvaluation
 }
 
 type State = {
@@ -41,7 +46,9 @@ const defaultState: State = {
         predicting: false
     },
     batch: {
-        uploadingCSV: false
+        uploadingCSV: false,
+        suites: [],
+        processingEvaluation: false
     }
 };
 
@@ -50,6 +57,62 @@ export const reducer: Reducer<State> = (
   action
 ) => {
   switch (action.type) {
+    case LoadTestSuitesAction: {
+        return {
+            ...state,
+            batch: {
+                ...state.batch,
+                loadingSuites: true
+            }
+        }
+    }
+    case TestSuitesLoadedAction: {
+        return {
+            ...state,
+            batch: {
+                ...state.batch,
+                loadingSuites: false,
+                suites: (action as TestSuitesLoaded).suites
+            }
+        }
+    }
+    case StartTestSuiteEvaluationAction: {
+        return {
+            ...state,
+            batch: {
+                ...state.batch,
+                processingEvaluation: true
+            }
+        }
+    }
+    case TestSuiteEvaluatedAction: {
+        return {
+            ...state,
+            batch: {
+                ...state.batch,
+                evaluation: (action as TestSuiteEvaluated).result,
+                processingEvaluation: false
+            }
+        }
+    }
+    case SelectSuiteForEvaluationAction: {
+        return {
+            ...state,
+            batch: {
+                ...state.batch,
+                suiteSelected: (action as SelectSuiteForEvaluation).suite
+            }
+        }
+    }
+    case CloseTestSuiteEvaluationAction: {
+        return {
+            ...state,
+            batch: {
+                ...state.batch,
+                suiteSelected: undefined
+            }
+        }
+    }
     case TestAppAction: {
         return {
             ...state,

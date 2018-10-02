@@ -49,6 +49,7 @@ class Examples extends React.Component<ExamplesProps, ExamplesState> {
   }
 
   componentWillMount() {
+    console.log("Props given to comps are: ", this.props)
     if (!this.props.intent) {
       this.props.pushRoute("/");
     } else {
