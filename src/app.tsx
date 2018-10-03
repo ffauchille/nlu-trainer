@@ -26,7 +26,6 @@ const epicMiddleware = createEpicMiddleware();
 const history: History = createBrowserHistory();
 
 let middlewares = applyMiddleware(epicMiddleware, routerMiddleware(history))
-console.log("mode is ", process.env.MODE)
 let tools = process.env.MODE === 'dev' ? composeWithDevTools(middlewares) : middlewares
 
 export const store = createStore(
