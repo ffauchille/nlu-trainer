@@ -1,71 +1,34 @@
 import { Epic } from "redux-observable";
-import {
-  Actions,
-  LoadAppIntentsAction,
-  LoadAppIntents,
-  appIntentsLoaded,
-  CreateIntentAction,
-  CreateIntent,
-  loadAppIntents,
-  IntentSelectedAction,
-  IntentSelected,
-  DeleteIntentAction,
-  DeleteIntent,
-  intentDeleted,
-  CreateEntityAction,
-  CreateEntity,
-  LoadAppEntitiesAction,
-  LoadAppEntities,
-  appEntitiesLoaded,
-  loadAppEntities
-} from "../actions";
 import { flatMap, map } from "rxjs/operators";
 import * as api from "../../apis";
+import { pushTo } from "../../navbar";
 import { StoreState } from "../../reducers";
-import { push } from "connected-react-router";
-import { urlify } from "../../utils";
+import { Actions, appEntitiesLoaded, categoryIntentsLoaded, CreateEntity, CreateEntityAction, CreateIntent, CreateIntentAction, DeleteIntent, DeleteIntentAction, intentDeleted, IntentSelected, IntentSelectedAction, LoadAppEntities, loadAppEntities, LoadAppEntitiesAction, LoadCategoryIntents, loadCategoryIntents, LoadCategoryIntentsAction } from "../actions";
 
-const loadAppIntentsEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
+const loadCategoryIntentsEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
   action$
-    .ofType(LoadAppIntentsAction)
-    .pipe(flatMap(a => api.getAppIntents((a as LoadAppIntents).app)))
-    .pipe(map(intents => appIntentsLoaded(intents)));
+    .ofType(LoadCategoryIntentsAction)
+    .pipe(flatMap(a => api.getCategoryIntents((a as LoadCategoryIntents).category)))
+    .pipe(map(intents => categoryIntentsLoaded(intents)));
 
- 
 const loadAppEntitiesEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
   action$
     .ofType(LoadAppEntitiesAction)
     .pipe(flatMap(a => api.getAppEntities((a as LoadAppEntities).app)))
     .pipe(map(entities => appEntitiesLoaded(entities)));
 
- 
-
-const intentSelectedEpic: Epic<Actions, Actions, StoreState, {}> = (
-  action$,
-  store$
-) =>
+const intentSelectedEpic: Epic<any, any> = (
   action$
-    .ofType(IntentSelectedAction)
-    .pipe(
-      map(a =>
-        push(
-          `/${urlify(
-            (store$.value.apps.selected || { name: "intent" }).name
-          )}/${urlify((a as IntentSelected).intent.name)}`
-        )
-      )
-    );
+) =>
+  action$.ofType(IntentSelectedAction).pipe(
+    map((a: IntentSelected) => pushTo(a.intent, "intent"))
+  );
 
 const createIntentEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
-  action$
-    .ofType(CreateIntentAction)
-    .pipe(
-      flatMap<any, any>((a: CreateIntent) =>
-        api
-          .createIntent(a.intentCreate)
-          .pipe(map(_ => loadAppIntents(a.intentCreate.appId || "")))
-      )
-    );
+  action$.ofType(CreateIntentAction).pipe(
+    flatMap<any, any>((a: CreateIntent) => api.createIntent(a.intentCreate)),
+    map(created => loadCategoryIntents(created.categoryId))
+  );
 
 const deleteIntentEpic: Epic<Actions, any> = action$ =>
   action$
@@ -77,15 +40,13 @@ const deleteIntentEpic: Epic<Actions, any> = action$ =>
     );
 
 const createEntityEpic = action$ =>
-    action$
-       .ofType(CreateEntityAction)
-       .pipe(
-         flatMap((a: CreateEntity) => api.createEntity(a.entity)),
-         map<any, any>(created => loadAppEntities(created.appId))
-       )
+  action$.ofType(CreateEntityAction).pipe(
+    flatMap((a: CreateEntity) => api.createEntity(a.entity)),
+    map<any, any>(created => loadAppEntities(created.appId))
+  );
 
 export default [
-  loadAppIntentsEpic,
+  loadCategoryIntentsEpic,
   loadAppEntitiesEpic,
   createIntentEpic,
   createEntityEpic,

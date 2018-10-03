@@ -1,9 +1,10 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { Container } from "semantic-ui-react";
+import { Container, Grid } from "semantic-ui-react";
 import HeadBar from "./navbar/headbar";
 import Navigation from "./navbar/navigation";
+import Categories from "./categories/categories";
 
 type LayoutOwnProps = React.Props<any> & {};
 type LayoutProps = LayoutOwnProps & {};
@@ -14,7 +15,7 @@ class Layout extends React.Component<LayoutProps, LayoutState> {
     return (
       <Container>
         <HeadBar />
-        <Container className="content-window">
+        <Container fluid className="content-window">
           <Navigation />
           <div style={{marginTop: "3em"}}>{this.props.children}</div>
         </Container>

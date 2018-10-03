@@ -1,12 +1,12 @@
 export class Intent {
   _id: string;
-  appId: string;
+  categoryId: string;
   name: string;
   examples: string[];
 
   constructor(props: Partial<Intent>) {
     this._id = props._id || "";
-    this.appId = props.appId || "";
+    this.categoryId = props.categoryId || "";
     this.name = props.name || "";
     this.examples = props.examples || [];
   }

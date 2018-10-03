@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 import { Example } from '../../models/example';
 import { IntentExamplesLoadedAction, IntentExamplesLoaded, ExampleDeletedAction, ExampleDeleted } from '../actions';
-import { LoadAppIntentsAction } from '../../intents/actions';
+import { LoadCategoryIntentsAction } from '../../intents/actions';
 import { removeAtIndex } from '../../utils';
 export type State = {
   all: Example[]
@@ -18,7 +18,7 @@ export const reducer: Reducer<State> = (
   action
 ): State => {
     switch (action.type) {
-      case LoadAppIntentsAction: {
+      case LoadCategoryIntentsAction: {
         return { ...state, loading: true }
       }
       case IntentExamplesLoadedAction: {

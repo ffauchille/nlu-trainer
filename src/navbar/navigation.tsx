@@ -11,7 +11,7 @@ import { AppModel } from "../models/app";
 import { Category } from "../models/category";
 import { Intent } from "../models/intent";
 import { StoreState } from "../reducers";
-import { urlify } from "../utils";
+import { serializeName } from "../utils";
 
 type NavigationOwnProps = React.Props<any> & {};
 
@@ -63,7 +63,7 @@ class Navigation extends React.Component<NavigationProps, NavigationState> {
           key="app-section"
           link
           onClick={(e, d) => {
-            this.props.pushRoute("/" + urlify(appName));
+            this.props.pushRoute("/" + serializeName(appName));
             this.props.unselectCategory();
           }}
         >
@@ -75,40 +75,36 @@ class Navigation extends React.Component<NavigationProps, NavigationState> {
         sections.push(
           divider(2),
           <Breadcrumb.Section
-            key="intent-link-section"
+            key="category-link-section"
             link
             onClick={(e, d) => {
               this.props.pushRoute(
-                "/" + urlify(appName) + "/" + urlify(categoryName)
+                "/" + serializeName(appName) + "/" + serializeName(categoryName)
               );
               this.props.unselectIntent();
             }}
           >
             {categoryName}
-          </Breadcrumb.Section>,
-          divider(3),
-          <Breadcrumb.Section key="examples-section" active>
-            Examples
           </Breadcrumb.Section>
         );
         if (this.props.intentSelected) {
           let intentName = this.props.intentSelected.name;
           sections.push(
-            divider(4),
+            divider(3),
             <Breadcrumb.Section
               key="intent-link-section"
               link
               onClick={(e, d) =>
                 this.props.pushRoute(
-                  "/" + urlify(appName) + "/" + urlify(categoryName)
+                  "/" + serializeName(appName) + "/" + serializeName(categoryName)
                 ) +
                 "/" +
-                urlify(intentName)
+                serializeName(intentName)
               }
             >
               {intentName}
             </Breadcrumb.Section>,
-            divider(5),
+            divider(4),
             <Breadcrumb.Section key="examples-section" active>
               Examples
             </Breadcrumb.Section>
@@ -139,7 +135,7 @@ const mapStateToProps = (state: StoreState, ownProps: NavigationOwnProps) => ({
   appSelected: state.apps.selected,
   intentSelected: state.intents.selected,
   testingApp: state.testbox.app,
-  categorySelected: state.category.categorySelected
+  categorySelected: state.category.selected
 });
 const mapDispatcherToProps = (dispatch: Dispatch) => ({
   pushRoute: bindActionCreators(push, dispatch),

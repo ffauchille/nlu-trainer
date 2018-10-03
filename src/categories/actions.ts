@@ -2,10 +2,10 @@ import { Action } from "redux";
 import { Category } from "../models/category";
 
 
-export type LoadCategories = Action<string> & {}
+export type LoadCategories = Action<string> & { appId: string }
 export const LoadCategoriesAction = "category#LoadCategories"
-export function loadCategories(): LoadCategories {
-    return { type: LoadCategoriesAction }
+export function loadCategories(appId: string): LoadCategories {
+    return { type: LoadCategoriesAction, appId }
 }
 
 export type CategoriesLoaded = Action<string> & { categories: Category[] }
@@ -16,8 +16,14 @@ export function categoriesLoaded(categories: Category[]): CategoriesLoaded {
 
 export type CreateCategory = Action<string> & { create: Partial<Category> }
 export const CreateCategoryAction = "categories#CreateCategory"
-export function CreateCategory(create: Partial<Category>): CreateCategory {
+export function createCategory(create: Partial<Category>): CreateCategory {
     return { type: CreateCategoryAction, create }
+}
+
+export type UpdateCategory = Action<string> & { category: Category }
+export const UpdateCategoryAction = "category#UpdateCategory"
+export function updateCategory(category: Category): UpdateCategory {
+    return { type: UpdateCategoryAction, category }
 }
 
 export type SelectCategory = Action<string> & { category: Category }
@@ -36,5 +42,6 @@ export type Actions =
     | LoadCategories
     | CategoriesLoaded
     | CreateCategory
+    | UpdateCategory
     | SelectCategory
     | UnselectCategory

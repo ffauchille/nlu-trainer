@@ -3,7 +3,8 @@ import { switchMap, map } from "rxjs/operators";
 import * as api from "./apis/common";
 import { RASAAppsStatus } from "./models/rasa";
 
-export const urlify = (label: string) => label.replace(" ", "-").toLowerCase();
+export const serializeName = (label: string) => encodeURIComponent(label);
+export const deserializeName = (serialized: string) => decodeURIComponent(serialized);
 
 function doRemove<T>(arr: T[], index: number): T[] {
   if (index > -1) {
@@ -56,6 +57,14 @@ export const strStartsWith = (str: string, starter: string): boolean => {
   }
   return res;
 };
+
+export const strEndsWith = (str: string, ender: string): boolean => {
+  let res = false;
+  if (str.length >= ender.length) {
+    res = str.slice(str.length - ender.length, str.length) === ender;
+  }
+  return res;
+}
 
 /** Same as findIndex of ES6.
  * return index of the element matching `predicate` in `arr` 

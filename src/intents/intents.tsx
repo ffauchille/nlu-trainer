@@ -8,16 +8,20 @@ import ItemView from "../items";
 import { AppModel } from "../models/app";
 import { Entity } from "../models/entity";
 import { Intent } from "../models/intent";
-import { deleteEntity, DeleteEntity, DeleteIntent, deleteIntent, IntentSelected, intentSelected, LoadAppEntities, loadAppEntities, loadAppIntents, LoadAppIntents } from "./actions";
+import { deleteEntity, DeleteEntity, DeleteIntent, deleteIntent, IntentSelected, intentSelected, LoadAppEntities, loadAppEntities, loadCategoryIntents, LoadCategoryIntents } from "./actions";
 import EntitiesForm from "./entitiesForm";
 import IntentsForm from "./intentsform";
+import { Category } from "../models/category";
+import { StoreState } from "../reducers";
 
-type IntentsOwnProps = React.Props<any> & {};
+type IntentsOwnProps = React.Props<any> & {
+  category: Category;
+};
 type IntentsProps = IntentsOwnProps & {
   app: AppModel;
   intents: Intent[];
   entities: Entity[];
-  loadAppIntents: (app: AppModel | string) => LoadAppIntents;
+  loadCategoryIntents: (app: Category | string) => LoadCategoryIntents;
   loadAppEntities: (app: AppModel | string) => LoadAppEntities;
   
   deleteIntent: (i: Intent) => DeleteIntent;
@@ -49,12 +53,7 @@ class Intents extends React.Component<IntentsProps, IntentsState> {
   }
 
   componentWillMount() {
-    if (!this.props.app) {
-      // Handles refresh on pages
-      this.props.pushRoute("/");
-    }
-    this.props.loadAppIntents(this.props.app);
-    this.props.loadAppEntities(this.props.app);
+    this.props.loadCategoryIntents(this.props.category);
   }
 
   onIntentSelected(intent: Intent) {
@@ -332,13 +331,13 @@ class Intents extends React.Component<IntentsProps, IntentsState> {
   }
 }
 
-const mapStateToProps = (state: any, ownProps: IntentsOwnProps) => ({
-  app: state.apps.selected,
+const mapStateToProps = (state: StoreState, ownProps: IntentsOwnProps) => ({
+  app: state.apps.selected || new AppModel({}), // TODO: do it properly ...
   intents: state.intents.all,
   entities: state.intents.entities
 });
 const mapDispatcherToProps = (dispatch: Dispatch) => ({
-  loadAppIntents: bindActionCreators(loadAppIntents, dispatch),
+  loadCategoryIntents: bindActionCreators(loadCategoryIntents, dispatch),
   loadAppEntities: bindActionCreators(loadAppEntities, dispatch),
   intentSelected: bindActionCreators(intentSelected, dispatch),
   deleteIntent: bindActionCreators(deleteIntent, dispatch),

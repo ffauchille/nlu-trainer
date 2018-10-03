@@ -24,7 +24,7 @@ import { rasaStatusUpdated } from "./apps/actions/rasa";
 import BatchPane from "./testbox/batchpane";
 
 const epicMiddleware = createEpicMiddleware();
-const history: History = createBrowserHistory();
+export const history: History = createBrowserHistory();
 
 let middlewares = applyMiddleware(epicMiddleware, routerMiddleware(history))
 let tools = process.env.MODE === 'dev' ? composeWithDevTools(middlewares) : middlewares
@@ -51,11 +51,11 @@ export class App extends React.Component<any, {}> {
         <Layout>
           <ConnectedRouter history={history}>
             <Switch>
-              <Route path="/testbox/:appId/:batchId" component={BatchPane}/>
-              <Route path="/testbox/:appId" component={TestBox}/>
-              <Route path="/:appId/:category/:intentName" component={Examples} />
-              <Route path="/:appId/:category" component={Intents} />
-              <Route path="/:appId" component={Categories} />
+              <Route path="/testbox/:app/:batchId" component={BatchPane}/>
+              <Route path="/testbox/:app" component={TestBox}/>
+              <Route path="/:app/:category/:intentName" component={Categories} />
+              <Route path="/:app/:category" component={Categories} />
+              <Route path="/:app" component={Categories} />
               <Route path="/" component={Apps} />
               <Redirect push to="/" />
             </Switch>

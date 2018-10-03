@@ -1,5 +1,5 @@
 import { Reducer } from "redux";
-import { AppIntentsLoadedAction, AppIntentsLoaded, UnselectIntentAction, IntentSelectedAction, IntentSelected, IntentDeleted, IntentDeletedAction, AppEntitiesLoadedAction, AppEntitiesLoaded } from "../actions";
+import { CategoryIntentsLoadedAction, CategoryIntentsLoaded, UnselectIntentAction, IntentSelectedAction, IntentSelected, IntentDeleted, IntentDeletedAction, AppEntitiesLoadedAction, AppEntitiesLoaded } from "../actions";
 import { Intent } from "../../models/intent";
 import { removeAtIndex } from "../../utils";
 import { Entity } from "../../models/entity";
@@ -20,10 +20,10 @@ export const reducer: Reducer<State> = (
   action
 ): State => {
   switch (action.type) {
-    case AppIntentsLoadedAction: {
+    case CategoryIntentsLoadedAction: {
       return {
         ...state,
-        all: (action as AppIntentsLoaded).intents
+        all: (action as CategoryIntentsLoaded).intents
       };
     }
     case AppEntitiesLoadedAction: {

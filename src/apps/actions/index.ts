@@ -85,6 +85,12 @@ export function appDeleted( app: AppModel ): AppDeleted {
     return { type: AppDeletedAction, app }
 }
 
+export type LoadAppByName = Action<string> & {appName: string}
+export const LoadAppByNameAction = "apps#LoadAppByName"
+export function loadAppByName(appName: string): LoadAppByName {
+    return { type: LoadAppByNameAction, appName }
+}
+
 export type Actions = 
     | LoadApps
     | AppsLoaded
@@ -98,3 +104,4 @@ export type Actions =
     | RasaStatusUpdated
     | DeleteApp
     | AppDeleted
+    | LoadAppByName

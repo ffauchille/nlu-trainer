@@ -14,7 +14,7 @@ import {
 import { bindActionCreators } from "redux";
 
 const APPS_FORM_NAME = "IntentForm";
-1
+
 interface IntentFormOwnProps extends React.Props<any> {
   intent?: Intent;
   editMode?: boolean;

@@ -3,3 +3,7 @@
     min-height: 100%;
     min-width: 100%;
 }
+
+.ui.link.list.list .active.item, .ui.link.list.list .active.item a:not(.ui) {
+        color: #6435C9;
+}

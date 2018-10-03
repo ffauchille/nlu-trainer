@@ -17,10 +17,12 @@ import ExamplesForm from "./examplesform";
 import { Path } from "history";
 import { push } from "connected-react-router";
 
-type ExamplesOwnProps = React.Props<any> & {};
+type ExamplesOwnProps = React.Props<any> & {
+  intent: Intent;
+};
 type ExamplesStateProps = {
   examples: Example[];
-  intent?: Intent;
+  
 };
 type ExamplesDispatchProps = {
   deleteExample: (e: Example) => DeleteExample;
@@ -49,12 +51,7 @@ class Examples extends React.Component<ExamplesProps, ExamplesState> {
   }
 
   componentWillMount() {
-    console.log("Props given to comps are: ", this.props)
-    if (!this.props.intent) {
-      this.props.pushRoute("/");
-    } else {
-      this.props.loadExamples(this.props.intent);
-    }
+    this.props.loadExamples(this.props.intent);
   }
 
   renderExamplesForm() {
@@ -159,8 +156,7 @@ class Examples extends React.Component<ExamplesProps, ExamplesState> {
 }
 
 const mapStateToProps = (state: StoreState, ownProps: ExamplesOwnProps) => ({
-  examples: state.examples.all,
-  intent: state.intents.selected
+  examples: state.examples.all
 });
 const mapDispatcherToProps = (dispatch: Dispatch) => ({
   loadExamples: bindActionCreators(loadIntentExample, dispatch),

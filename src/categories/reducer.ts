@@ -4,7 +4,7 @@ import { Category } from "../models/category";
 
 export type State = {
   categories: Category[];
-  categorySelected?: Category;
+  selected?: Category;
   categoriesAreLoading: boolean
 };
 
@@ -35,14 +35,14 @@ export const reducer: Reducer<State> = (
     case SelectCategoryAction: {
         return {
             ...state,
-            categorySelected: (action as SelectCategory).category
+            selected: (action as SelectCategory).category
         }
     }
 
     case UnselectCategoryAction: {
         return {
             ...state,
-            categorySelected: undefined
+            selected: undefined
         }
     }
 
