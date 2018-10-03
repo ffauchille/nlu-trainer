@@ -5,9 +5,11 @@ import appsEpics from "../apps/epics";
 import intentsEpics from "../intents/epics";
 import examplesEpics from "../examples/epics";
 import testboxEpics from "../testbox/epics";
+import categoriesEpics from "../categories/epics";
 
 const epics: any[] = [
   ...appsEpics,
+  ...categoriesEpics,
   ...intentsEpics,
   ...examplesEpics,
   ...testboxEpics

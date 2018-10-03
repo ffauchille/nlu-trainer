@@ -7,6 +7,7 @@ import { Example } from "../models/example";
 import { normalize } from "../utils";
 import { Entity } from "../models/entity";
 import { TestSuite, TestSuiteCreation, TestSuiteEvaluation, ModelEvaluation } from "../models/testsuite";
+import { Category } from "../models/category";
 
 export const getApps = (): Observable<AppModel[]> =>
   get("/apps").pipe(map(r => (r as AppModel[]).map(e => new AppModel(e))));
@@ -93,3 +94,10 @@ export const uploadCSVTrainings$ = (
   suiteId: string
 ): Observable<TestSuite> =>
   postFile(`/testsuites/examples/csv?testSuiteId=${suiteId}`, file);
+
+
+export const getCategories = (appId: string): Observable<Category[]> =>
+  get<Category[]>(`/categories?appId=${appId}`).pipe(map(r => r.map(e => new Category(e))))
+
+export const createCategory = (creation: Partial<Category>): Observable<Category> =>
+  post<Partial<Category>, Category>("/categories", creation).pipe(map(r => new Category(r)))

@@ -12,6 +12,7 @@ import Apps from "./apps/apps";
 import TestBox from "./testbox/testbox";
 import Intents from "./intents/intents";
 import Examples from "./examples/examples";
+import Categories from "./categories/categories";
 import Layout from "./layout";
 
 import "../semantic/dist/semantic.min.css"
@@ -52,8 +53,9 @@ export class App extends React.Component<any, {}> {
             <Switch>
               <Route path="/testbox/:appId/:batchId" component={BatchPane}/>
               <Route path="/testbox/:appId" component={TestBox}/>
-              <Route path="/:appId/:intentName" component={Examples} />
-              <Route path="/:appId" component={Intents} />
+              <Route path="/:appId/:category/:intentName" component={Examples} />
+              <Route path="/:appId/:category" component={Intents} />
+              <Route path="/:appId" component={Categories} />
               <Route path="/" component={Apps} />
               <Redirect push to="/" />
             </Switch>
