@@ -66,7 +66,9 @@ export const createIntent = (
   post("/intents", intentCreate).pipe(map(r => new Intent(r)));
 export const createExample = (
   exampleCreate: Partial<Example>
-): Observable<any> => post("/examples", exampleCreate);
+): Observable<Example> => {
+  return post("/examples", exampleCreate).pipe(map(ex => new Example(ex)));
+};
 export const createEntity = (
   entityCreate: Partial<Entity>
 ): Observable<Entity> =>
@@ -130,6 +132,5 @@ export const createCategory = (
     map(r => new Category(r))
   );
 
-
-export const getAppByName = (name: string): Observable<AppModel> => 
-    get(`/apps/byname?appName=${name}`).pipe(map(r => new AppModel(r)));
+export const getAppByName = (name: string): Observable<AppModel> =>
+  get(`/apps/byname?appName=${name}`).pipe(map(r => new AppModel(r)));
