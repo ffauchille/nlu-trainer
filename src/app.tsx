@@ -10,8 +10,6 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import epics from "./epics";
 import Apps from "./apps/apps";
 import TestBox from "./testbox/testbox";
-import Intents from "./intents/intents";
-import Examples from "./examples/examples";
 import Categories from "./categories/categories";
 import Layout from "./layout";
 
