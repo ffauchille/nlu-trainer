@@ -215,7 +215,7 @@ class Intents extends React.Component<IntentsProps, IntentsState> {
             onCreateSubmit={intent =>
               this.setState({ createIntentMode: false })
             }
-            beforeCreate={pl => ({ ...pl, appId: this.props.app._id })}
+            beforeCreate={pl => ({ ...pl, appId: this.props.app._id, categoryId: this.props.category._id })}
           />
         </Modal.Content>
       </Modal>

@@ -3,12 +3,38 @@ import { flatMap, map } from "rxjs/operators";
 import * as api from "../../apis";
 import { pushTo } from "../../navbar";
 import { StoreState } from "../../reducers";
-import { Actions, appEntitiesLoaded, categoryIntentsLoaded, CreateEntity, CreateEntityAction, CreateIntent, CreateIntentAction, DeleteIntent, DeleteIntentAction, intentDeleted, IntentSelected, IntentSelectedAction, LoadAppEntities, loadAppEntities, LoadAppEntitiesAction, LoadCategoryIntents, loadCategoryIntents, LoadCategoryIntentsAction } from "../actions";
+import {
+  Actions,
+  appEntitiesLoaded,
+  categoryIntentsLoaded,
+  CreateEntity,
+  CreateEntityAction,
+  CreateIntent,
+  CreateIntentAction,
+  DeleteIntent,
+  DeleteIntentAction,
+  intentDeleted,
+  IntentSelected,
+  IntentSelectedAction,
+  LoadAppEntities,
+  loadAppEntities,
+  LoadAppEntitiesAction,
+  LoadCategoryIntents,
+  loadCategoryIntents,
+  LoadCategoryIntentsAction
+} from "../actions";
 
-const loadCategoryIntentsEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
+const loadCategoryIntentsEpic: Epic<
+  Actions,
+  Actions,
+  StoreState,
+  {}
+> = action$ =>
   action$
     .ofType(LoadCategoryIntentsAction)
-    .pipe(flatMap(a => api.getCategoryIntents((a as LoadCategoryIntents).category)))
+    .pipe(
+      flatMap(a => api.getCategoryIntents((a as LoadCategoryIntents).category))
+    )
     .pipe(map(intents => categoryIntentsLoaded(intents)));
 
 const loadAppEntitiesEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
@@ -17,12 +43,10 @@ const loadAppEntitiesEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
     .pipe(flatMap(a => api.getAppEntities((a as LoadAppEntities).app)))
     .pipe(map(entities => appEntitiesLoaded(entities)));
 
-const intentSelectedEpic: Epic<any, any> = (
+const intentSelectedEpic: Epic<any, any> = action$ =>
   action$
-) =>
-  action$.ofType(IntentSelectedAction).pipe(
-    map((a: IntentSelected) => pushTo(a.intent, "intent"))
-  );
+    .ofType(IntentSelectedAction)
+    .pipe(map((a: IntentSelected) => pushTo(a.intent, "intent")));
 
 const createIntentEpic: Epic<Actions, Actions, StoreState, {}> = action$ =>
   action$.ofType(CreateIntentAction).pipe(
