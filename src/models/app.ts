@@ -26,6 +26,8 @@ export class AppModel {
     }
 }
 
+export type TrainingStatus = "ready" | "training" | "empty";
+
 export type AppStatus = {
     app: AppModel;
     status: string

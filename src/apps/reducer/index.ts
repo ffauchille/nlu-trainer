@@ -47,17 +47,29 @@ export const reducer: Reducer<State> = (
       };
     }
     case StartAppTrainingAction: {
+      const underTraining = (action as StartAppTraining).app;
       return {
         ...state,
-        onTraining: state.onTraining.concat((action as StartAppTraining).app)
+        onTraining: state.onTraining.concat(underTraining),
+        statuses: findAllAndUpdate(
+          state.statuses,
+          status => status.app._id === underTraining._id,
+          status => ({ ...status, status: "training" })
+        )
       };
     }
     case AppTrainedAction: {
+      const trained = (action as AppTrained).app;
       return {
         ...state,
         onTraining: removeAtIndex(
           state.onTraining,
-          a => a._id === (action as AppTrained).app._id
+          a => a._id === trained._id
+        ),
+        statuses: findAllAndUpdate(
+          state.statuses,
+          status => status.app._id === trained._id,
+          status => ({ ...status, status: "ready" })
         )
       };
     }
@@ -68,18 +80,27 @@ export const reducer: Reducer<State> = (
       };
     }
     case RasaStatusUpdatedAction: {
-      let statusUpdates = (action as RasaStatusUpdated).status.available_projects
-      let appsToBeUpdate = (state.all.filter(app => normalize(app.name) in statusUpdates))
+      let statusUpdates = (action as RasaStatusUpdated).status
+        .available_projects;
+      let appsToBeUpdate = state.all.filter(
+        app => normalize(app.name) in statusUpdates
+      );
       return {
         ...state,
-        statuses: appsToBeUpdate.map(a => ({ app: a, status: (statusUpdates[normalize(a.name)]).status }))
-      }
+        statuses: appsToBeUpdate.map(a => ({
+          app: a,
+          status: statusUpdates[normalize(a.name)].status
+        }))
+      };
     }
-    case AppDeletedAction:{
+    case AppDeletedAction: {
       return {
         ...state,
-        all: removeAtIndex(state.all, app => app._id === (action as AppDeleted).app._id)
-      }
+        all: removeAtIndex(
+          state.all,
+          app => app._id === (action as AppDeleted).app._id
+        )
+      };
     }
     default:
       return state;
