@@ -1,16 +1,27 @@
 import { Reducer } from "redux";
-import { Actions, LoadCategoriesAction, CategoriesLoadedAction, CategoriesLoaded, SelectCategoryAction, SelectCategory, UnselectCategoryAction } from "./actions";
+import {
+  Actions,
+  LoadCategoriesAction,
+  CategoriesLoadedAction,
+  CategoriesLoaded,
+  SelectCategoryAction,
+  SelectCategory,
+  UnselectCategoryAction,
+  StopContentLoader,
+  StartContentLoaderAction,
+  StopContentLoaderAction
+} from "./actions";
 import { Category } from "../models/category";
 
 export type State = {
   categories: Category[];
   selected?: Category;
-  categoriesAreLoading: boolean
+  loadingContent: boolean;
 };
 
 export const defaultState = (): State => ({
   categories: [],
-  categoriesAreLoading: false
+  loadingContent: false
 });
 
 export const reducer: Reducer<State> = (
@@ -18,32 +29,39 @@ export const reducer: Reducer<State> = (
   action: Actions
 ): State => {
   switch (action.type) {
-    case LoadCategoriesAction: {
-        return {
-            ...state,
-            categoriesAreLoading: true
-        }
-    }
     case CategoriesLoadedAction: {
-        return {
-            ...state,
-            categoriesAreLoading: false,
-            categories: (action as CategoriesLoaded).categories
-        }
+      return {
+        ...state,
+        categories: (action as CategoriesLoaded).categories
+      };
     }
 
     case SelectCategoryAction: {
-        return {
-            ...state,
-            selected: (action as SelectCategory).category
-        }
+      return {
+        ...state,
+        selected: (action as SelectCategory).category
+      };
+    }
+
+    case StartContentLoaderAction: {
+      return {
+        ...state,
+        loadingContent: true
+      };
+    }
+
+    case StopContentLoaderAction: {
+      return {
+        ...state,
+        loadingContent: false
+      };
     }
 
     case UnselectCategoryAction: {
-        return {
-            ...state,
-            selected: undefined
-        }
+      return {
+        ...state,
+        selected: undefined
+      };
     }
 
     default: {

@@ -2,19 +2,13 @@ import { push, RouterAction } from "connected-react-router";
 import { LocationState, Path } from "history";
 import * as React from "react";
 import { connect } from "react-redux";
+import { RouteComponentProps } from "react-router";
 import { bindActionCreators, Dispatch } from "redux";
-import {
-  Button,
-  Grid,
-  Icon,
-  List,
-  Modal,
-  Segment,
-  Header,
-  Divider
-} from "semantic-ui-react";
+import { Button, Grid, Icon, List, Modal } from "semantic-ui-react";
+import { LoadAppByName, loadAppByName } from "../apps/actions";
 import { AppModel } from "../models/app";
 import { Category } from "../models/category";
+import { Intent } from "../models/intent";
 import { StoreState } from "../reducers";
 import {
   loadCategories,
@@ -23,11 +17,7 @@ import {
   SelectCategory
 } from "./actions";
 import CategoriesForm from "./categoriesform";
-import { RouteComponentProps } from "react-router";
-import { Intent } from "../models/intent";
-import Intents from "../intents/intents";
-import Examples from "../examples/examples";
-import { LoadAppByName, loadAppByName } from "../apps/actions";
+import CategoryContent from "./categorycontent";
 
 type CategoriesOwnProps = React.Props<any> &
   RouteComponentProps<{
@@ -61,7 +51,7 @@ class Categories extends React.Component<CategoriesProps, CategoriesState> {
     if (this.props.app) {
       this.props.loadCategories(this.props.app._id);
     } else if (this.props && this.props.match.params.app) {
-      this.props.loadAppByName(this.props.match.params.app)
+      this.props.loadAppByName(this.props.match.params.app);
     }
   }
 
@@ -78,7 +68,10 @@ class Categories extends React.Component<CategoriesProps, CategoriesState> {
         active={this.categoryIsSelected(category)}
         className={this.categoryIsSelected(category) ? "color-violet" : ""}
       >
-        <List.Icon color={this.categoryIsSelected(category) ? "violet" : "grey"} name={this.categoryIsSelected(category) ? "folder open" : "folder"} />
+        <List.Icon
+          color={this.categoryIsSelected(category) ? "violet" : "grey"}
+          name={this.categoryIsSelected(category) ? "folder open" : "folder"}
+        />
         {category.name}
       </List.Item>
     );
@@ -133,27 +126,15 @@ class Categories extends React.Component<CategoriesProps, CategoriesState> {
     );
   }
 
-  renderFrameContent() {
-    var elem = (
-      <Segment basic textAlign="center">
-        Hint <Icon name="lightbulb" color="violet" />: Select a category to see
-        its intents
-      </Segment>
-    );
-    if (this.props.category) {
-      if (this.props.intent) elem = <Examples intent={this.props.intent} />;
-      else elem = <Intents category={this.props.category} />;
-    }
-    return elem;
-  }
-
   render() {
     let elem = <React.Fragment />;
     if (this.props.app) {
       elem = (
         <Grid>
           <Grid.Column width="3">{this.renderCategoryBrowser()}</Grid.Column>
-          <Grid.Column width="13">{this.renderFrameContent()}</Grid.Column>
+          <Grid.Column width="13">
+            <CategoryContent />
+          </Grid.Column>
         </Grid>
       );
     }

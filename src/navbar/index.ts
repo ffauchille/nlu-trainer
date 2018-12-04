@@ -9,7 +9,6 @@ export const pushTo = (model: Intent | AppModel | Category, typ: "intent" | "app
     let current = history.location.pathname
     let base = current
     let split = current.split("/").filter(el => el.length > 0)
-    console.log("push To split is ", split, " and type is ", typ)
     switch (typ) {
         case "intent":
             base = split.length > 1 ? `/${split[0]}/${split[1]}/` : "/"
